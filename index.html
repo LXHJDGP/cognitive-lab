@@ -34,6 +34,8 @@ svg{width:20px;height:20px;display:block;flex:none}
 .local{display:flex;align-items:center;gap:8px;margin:17px 10px 5px;padding-top:14px;border-top:1px solid #39384f;color:#c3c3d9;font-size:12px}
 .local i,.today i{width:7px;height:7px;background:#72d5bd;border-radius:50%;flex:none}
 .topbar{height:66px;background:#fff;border-bottom:1px solid var(--line);padding:0 34px;display:flex;align-items:center;justify-content:space-between;gap:12px;font-size:14px;font-weight:650}
+.top-actions{display:flex;align-items:center;justify-content:flex-end;gap:12px}
+.offline-download{white-space:nowrap;font-size:13px}
 .today{display:flex;align-items:center;gap:8px;font-weight:500;color:var(--muted);font-size:13px}
 .today svg{width:17px;height:17px}
 main{max-width:1440px;margin:auto;padding:25px 34px 38px}
@@ -152,6 +154,7 @@ dialog::backdrop{background:#15112690}
 @media(max-width:1050px){.layout{grid-template-columns:187px minmax(0,1fr)}.rail{padding-inline:12px}main,.topbar{padding-inline:22px}.storage-alert{margin-inline:22px}.module-grid{grid-template-columns:repeat(3,minmax(0,1fr))}}
 @media(max-width:760px){.layout{display:block}.rail{height:auto;position:static;padding:11px 12px;display:grid;gap:8px}.brand{padding:0}.brand-mark{width:31px;height:31px}.brand-mark svg{width:18px;height:18px}.rail nav{display:flex;flex-wrap:wrap;gap:3px}.rail button{width:auto;font-size:12px;padding:5px 6px;gap:4px}.rail button svg{width:14px;height:14px}.rail-bottom{display:flex;align-items:center;gap:5px}.local{margin:0 0 0 6px;padding:0;border:0;font-size:10px}.topbar{height:44px}.topbar,main{padding-inline:13px}.storage-alert{margin-inline:13px}main{padding-top:15px}.dash-grid{grid-template-columns:1fr}.module-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.hero{padding:20px 15px}.hero canvas{opacity:.58}.hero::after{background:linear-gradient(90deg,#272046 15%,transparent 100%)}}
 @media(forced-colors:active){.bar-track i,.progress span{background:Highlight}.week-dots b.done{outline:2px solid Highlight}}
+@media(max-width:430px){.top-actions:has(.offline-download:not([hidden])) .today{display:none}}
 
 </style>
 </head>
@@ -170,7 +173,13 @@ dialog::backdrop{background:#15112690}
     <div class="rail-bottom"><button data-go="data"><span data-icon="settings"></span>设置与备份</button><div class="local"><i></i><span>本地离线工作台</span></div></div>
   </aside>
   <div class="workspace">
-    <header class="topbar"><span id="crumb">今日工作台</span><span id="today" class="today"></span></header>
+    <header class="topbar">
+      <span id="crumb">今日工作台</span>
+      <div class="top-actions">
+        <span id="today" class="today"></span>
+        <a id="offline-download" class="btn offline-download" href="./index.html" download="认知实验室.html" hidden><span data-icon="download"></span>下载离线版</a>
+      </div>
+    </header>
     <div id="storage-alert" class="storage-alert" role="status" hidden></div>
     <main id="main" tabindex="-1"></main>
   </div>
@@ -470,6 +479,7 @@ const paths = {
   focus:'<circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5"/><circle cx="12" cy="12" r="1"/>',
   arrow:'<path d="M4 12h15m-6-6 6 6-6 6"/>',
   clock:'<circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/>',
+  download:'<path d="M12 3v12m-4-4 4 4 4-4M4 16v4h16v-4"/>',
   check:'<path d="m5 12 4 4L19 6"/>'
 };
 const icon = name => `<svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">${paths[name]||''}</svg>`;
@@ -494,6 +504,7 @@ let dateKey=day(), reviewWeek=monday(dateKey);
 let filters={module:'update',mode:'nback',level:1,range:30,hModule:'all',hRange:90,hPage:0};
 const labels={home:'今日工作台',library:'训练模块',history:'训练记录',review:'每周复盘',science:'科学依据',data:'设置与备份',setup:'训练准备',train:'正在训练',result:'训练小结'};
 document.querySelectorAll('[data-icon]').forEach(node=>node.innerHTML=icon(node.dataset.icon));
+document.getElementById('offline-download').hidden=!/^https?:$/.test(location.protocol);
 
 function assert(condition) {
   if (!condition) throw new Error('文件结构或版本不符合本工作台的备份格式。');
