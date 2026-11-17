@@ -1,0 +1,1416 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="color-scheme" content="light">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'unsafe-inline'; style-src 'unsafe-inline'; img-src data:; base-uri 'none'; form-action 'none'">
+<title>认知实验室｜个人认知训练工作台</title>
+<style>
+:root{font-family:"Inter","Segoe UI","Microsoft YaHei UI","PingFang SC",sans-serif;color:#202339;background:#f6f7fb;font-size:15px;line-height:1.6;--ink:#202339;--muted:#5d647a;--line:#e2e5ef;--accent:#5941c5;--purple:#eeeaff;--rail:#19192d;--good:#176752;--bad:#942947}
+*,*::before,*::after{box-sizing:border-box}
+body{margin:0;min-width:280px}
+a{color:var(--accent);text-underline-offset:.2em}
+button,input,select,textarea{font:inherit}
+button{cursor:pointer}
+button:disabled{cursor:default;opacity:.54}
+:focus-visible{outline:3px solid #7958e9;outline-offset:3px}
+[hidden]{display:none!important}
+svg{width:20px;height:20px;display:block;flex:none}
+.skip{position:fixed;z-index:9;top:8px;left:8px;padding:8px 14px;background:white;transform:translateY(-150%)}
+.skip:focus{transform:none}
+.layout{display:grid;grid-template-columns:224px minmax(0,1fr);min-height:100vh}
+.rail{height:100vh;position:sticky;top:0;display:flex;flex-direction:column;padding:32px 16px 16px;background:var(--rail);color:#fff;z-index:2}
+.brand{display:flex;align-items:center;gap:11px;padding:0 8px 35px}
+.brand strong{display:block;font-size:17px;letter-spacing:.04em;line-height:1.4}
+.brand small{color:#b7b4d1;font-size:10px;letter-spacing:.18em;font-weight:700}
+.brand-mark{width:39px;height:39px;border-radius:11px;background:#7657eb;color:white;display:grid;place-items:center}
+.brand-mark svg{width:23px;height:23px}
+.rail nav{display:grid;gap:6px}
+.rail button{background:transparent;color:#c3c3d9;border:1px solid transparent;width:100%;text-align:left;border-radius:9px;padding:10px 11px;display:flex;align-items:center;gap:10px;font-size:14px;white-space:nowrap}
+.rail button:hover,.rail button[aria-current=page]{background:#30284f;border-color:#493970;color:#fbfaff}
+.rail button[aria-current=page] svg{color:#c3b0ff}
+.rail-bottom{margin-top:auto}
+.local{display:flex;align-items:center;gap:8px;margin:17px 10px 5px;padding-top:14px;border-top:1px solid #39384f;color:#c3c3d9;font-size:12px}
+.local i,.today i{width:7px;height:7px;background:#72d5bd;border-radius:50%;flex:none}
+.topbar{height:66px;background:#fff;border-bottom:1px solid var(--line);padding:0 34px;display:flex;align-items:center;justify-content:space-between;gap:12px;font-size:14px;font-weight:650}
+.today{display:flex;align-items:center;gap:8px;font-weight:500;color:var(--muted);font-size:13px}
+.today svg{width:17px;height:17px}
+main{max-width:1440px;margin:auto;padding:25px 34px 38px}
+main:focus{outline:none}
+h1,h2,h3,p{margin:0}
+h1,h2,h3{line-height:1.3}
+h1{font-size:clamp(27px,3vw,39px);letter-spacing:-.035em}
+h2{font-size:21px;letter-spacing:-.01em}
+h3{font-size:16px}
+.page-heading{margin-bottom:20px}
+.page-heading p,.lede{margin-top:6px;color:var(--muted)}
+.hero{position:relative;isolation:isolate;overflow:hidden;border-radius:17px;color:white;background:linear-gradient(105deg,#272046,#37265c 64%,#49317b);padding:24px 27px;min-height:193px;display:grid;align-items:center;margin-bottom:17px}
+.hero::after{content:"";position:absolute;inset:0;z-index:-1;background:linear-gradient(90deg,#272046 4%,transparent 82%)}
+.hero canvas{position:absolute;height:100%;width:min(66%,650px);right:0;top:0;z-index:-2}
+.hero .eyebrow{color:#dbceff;margin-bottom:7px;display:flex;gap:6px;align-items:center}
+.eyebrow svg{width:15px;height:15px}
+.hero h2{font-size:clamp(23px,3vw,33px);letter-spacing:-.03em}
+.hero p{color:#e6dbf9;margin:7px 0 14px;font-size:14px}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:7px;border:1px solid #d9ddec;border-radius:8px;padding:7px 12px;background:#fff;color:var(--ink);font-weight:650;min-height:38px;text-decoration:none;line-height:1.35}
+.btn svg{width:16px;height:16px}
+.btn:hover{background:#f3f0ff;border-color:#b5a8ec}
+.primary{color:white;background:var(--accent);border-color:var(--accent)}
+.primary:hover{color:white;background:#4930ae;border-color:#4930ae}
+.hero .primary{background:white;color:#35216d;border-color:white}
+.hero .primary:hover{background:#ece4ff}
+.ghost{background:transparent;border-color:transparent;color:var(--accent)}
+.text-btn{color:var(--accent);font-weight:650;border:0;padding:4px;background:transparent}
+.text-btn:hover{text-decoration:underline}
+.eyebrow{font-size:12px;font-weight:700;letter-spacing:.03em;color:var(--accent)}
+.dash-grid{display:grid;grid-template-columns:minmax(0,1.6fr) minmax(240px,1fr);gap:15px}
+.card{border:1px solid var(--line);border-radius:13px;background:#fff;padding:17px;min-width:0}
+.card-head,.flex-between{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap}
+.card-head{margin-bottom:11px}
+.card-head h2{font-size:18px}
+.plan-list{list-style:none;padding:0;margin:0}
+.plan-row{display:grid;grid-template-columns:auto minmax(0,1fr) auto;align-items:center;gap:11px;padding:9px 0;border-top:1px solid #edf0f6}
+.plan-row strong,.module-name{display:block;font-size:14px;line-height:1.35}
+.sub,.hint{color:var(--muted);font-size:12px}
+.tile-icon{width:37px;height:37px;display:grid;place-items:center;border-radius:9px;background:var(--tint,#eeeaff);color:var(--tone,#5941c5);flex:none}
+.tile-icon svg{width:19px;height:19px}
+.stats{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}
+.stats>div{min-width:0;padding:8px 8px 5px;border-radius:8px;background:#f6f5fc;font-variant-numeric:tabular-nums}
+.stats strong{display:block;font-size:22px;line-height:1.28;overflow-wrap:anywhere}
+.stats small{font-size:11px;color:var(--muted)}
+.week-dots{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:5px;margin:12px 0 8px}
+.week-dots div{display:grid;text-align:center;gap:4px;font-size:11px;color:var(--muted)}
+.week-dots b{height:24px;display:grid;place-items:center;border-radius:5px;background:#eff0f7;color:#51586d}
+.week-dots b.done{background:#e6defd;color:#4b2fae}
+.week-dots b.current{outline:1px solid #8772d4;outline-offset:1px}
+.module-section{margin-top:16px}
+.module-grid{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:10px}
+.module-tile{display:grid;gap:6px;text-align:left;color:var(--ink);padding:12px;border:1px solid var(--line);background:#fff;border-radius:10px;align-content:start}
+.module-tile:hover{border-color:#9883df;background:#fcfbff}
+.module-tile .tile-icon{width:33px;height:33px}
+.module-tile .sub{font-size:11px}
+.wide-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(260px,100%),1fr));gap:14px}
+.stack{display:grid;gap:14px}
+.prose{max-width:880px}
+.prose p,.prose ul{margin:8px 0 0}
+.prose ul{padding-left:22px}
+.prose li+li{margin-top:5px}
+.chips,.actions,.filters{display:flex;flex-wrap:wrap;align-items:center;gap:8px}
+.actions{margin-top:13px}
+.chip{display:inline-flex;align-items:center;padding:2px 7px;background:#f0ecfe;color:#4a348f;border-radius:4px;font-size:11px;font-weight:700;line-height:1.6}
+.chip.good{background:#e0f4ee;color:#176752}
+.chip.neutral{background:#eef0f6;color:#555b71}
+.row-gap{display:grid;gap:8px}
+.field{display:grid;gap:4px;font-size:13px;color:var(--muted)}
+.field strong{color:var(--ink)}
+input:not([type=checkbox]),textarea,select{min-width:0;width:100%;padding:8px 10px;background:#fff;color:var(--ink);border:1px solid #cbd0e1;border-radius:7px}
+.filters .field{min-width:min(155px,100%)}
+.compact{max-width:360px}
+.check{display:flex;align-items:flex-start;gap:6px}
+input[type=checkbox]{width:17px;height:17px;accent-color:var(--accent)}
+.training{max-width:860px;margin-inline:auto}
+.train-head{margin-bottom:16px}
+.clock,.numeric{font-family:"Cascadia Mono",Consolas,monospace;font-variant-numeric:tabular-nums}
+.clock{font-size:17px;color:#4b378c}
+.progress{height:5px;background:#ececf5;border-radius:9px;overflow:hidden;margin-top:10px}
+.progress span{display:block;height:100%;background:#7455db}
+.stage{padding:clamp(15px,3.2vw,32px);min-height:252px}
+.stage h2{margin:5px 0 9px}
+.stage p+p{margin-top:8px}
+.stimulus{background:#f4f1ff;border:1px solid #e4dbff;border-radius:11px;text-align:center;color:#392774;font-size:64px;font-weight:750;padding:7px 10px;margin:14px 0;line-height:1.45}
+.stimulus.small{font-size:clamp(24px,5vw,48px)}
+.choice{font-size:15px;justify-content:flex-start;text-align:left}
+.choice-grid{display:grid;gap:7px;margin-top:12px}
+.choice-row{display:flex;flex-wrap:wrap;gap:8px;margin-top:14px}
+.choice-row button{min-width:88px}
+.choice-row .selected{background:#e6dcff;border-color:#7959df;opacity:1}
+.feedback{border-left:4px solid #7970b9;background:#f4f2fb;padding:10px 13px;margin-top:12px;border-radius:5px;overflow-wrap:anywhere}
+.feedback.correct{border-color:#198162;background:#ebf8f3}
+.feedback.error{border-color:#a23952;background:#fdf0f2}
+.stem,.focus-goal{padding:10px 13px;background:#f6f7fb;border-radius:7px;margin:8px 0 12px;overflow-wrap:anywhere}
+.steps{padding-left:24px;margin:10px 0}
+.steps li+li{margin-top:5px}
+.countdown{font-size:clamp(42px,8vw,78px);font-weight:750;line-height:1.35;color:#3d2c7b;margin:10px 0}
+.train-controls{margin-top:10px;display:flex;gap:8px;flex-wrap:wrap;justify-content:space-between}
+.table-wrap{overflow:auto}
+table{width:100%;border-collapse:collapse;text-align:left;font-size:13px}
+th,td{border-bottom:1px solid #e9eaf3;padding:8px 9px;vertical-align:top}
+th{color:var(--muted);white-space:nowrap}
+tbody tr:last-child td{border-bottom:0}
+.bars{height:139px;display:grid;grid-template-columns:repeat(7,minmax(0,1fr));align-items:end;gap:7px;margin:10px 0}
+.bar-item{text-align:center;display:grid;grid-template-rows:15px 95px 18px;gap:3px;font-size:11px;color:var(--muted)}
+.bar-track{height:95px;background:#f3f1fb;display:flex;align-items:flex-end;justify-content:center;border-radius:7px;overflow:hidden}
+.bar-track i{width:100%;display:block;background:#8264e0;border-radius:6px 6px 0 0}
+.bar-caption{margin-top:5px;color:var(--muted);font-size:12px}
+.empty{border:1px dashed #d9d9e9;border-radius:8px;padding:16px;color:var(--muted)}
+details summary{cursor:pointer;font-weight:650}
+details .table-wrap{margin-top:7px}
+.storage-alert{margin:14px 34px 0;border:1px solid #e1c37e;background:#fff4d9;color:#523d0f;padding:8px 13px;border-radius:7px;font-size:13px}
+#toast:not(:empty){position:fixed;bottom:19px;right:19px;z-index:5;background:#292043;color:white;padding:9px 15px;border-radius:7px;max-width:min(380px,90vw);box-shadow:0 4px 18px #17102b30}
+dialog{border:1px solid var(--line);border-radius:13px;color:var(--ink);width:min(440px,calc(100% - 26px));padding:20px}
+dialog::backdrop{background:#15112690}
+@media(max-width:1050px){.layout{grid-template-columns:187px minmax(0,1fr)}.rail{padding-inline:12px}main,.topbar{padding-inline:22px}.storage-alert{margin-inline:22px}.module-grid{grid-template-columns:repeat(3,minmax(0,1fr))}}
+@media(max-width:760px){.layout{display:block}.rail{height:auto;position:static;padding:11px 12px;display:grid;gap:8px}.brand{padding:0}.brand-mark{width:31px;height:31px}.brand-mark svg{width:18px;height:18px}.rail nav{display:flex;flex-wrap:wrap;gap:3px}.rail button{width:auto;font-size:12px;padding:5px 6px;gap:4px}.rail button svg{width:14px;height:14px}.rail-bottom{display:flex;align-items:center;gap:5px}.local{margin:0 0 0 6px;padding:0;border:0;font-size:10px}.topbar{height:44px}.topbar,main{padding-inline:13px}.storage-alert{margin-inline:13px}main{padding-top:15px}.dash-grid{grid-template-columns:1fr}.module-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.hero{padding:20px 15px}.hero canvas{opacity:.58}.hero::after{background:linear-gradient(90deg,#272046 15%,transparent 100%)}}
+@media(forced-colors:active){.bar-track i,.progress span{background:Highlight}.week-dots b.done{outline:2px solid Highlight}}
+
+</style>
+</head>
+<body>
+<a class="skip" href="#main">跳到主内容</a>
+<div class="layout">
+  <aside class="rail">
+    <div class="brand"><span class="brand-mark" data-icon="logo"></span><div><strong>认知实验室</strong><small>COGNITIVE LAB</small></div></div>
+    <nav aria-label="工作台导航">
+      <button data-go="home"><span data-icon="home"></span>今日工作台</button>
+      <button data-go="library"><span data-icon="library"></span>训练模块</button>
+      <button data-go="history"><span data-icon="chart"></span>训练记录</button>
+      <button data-go="review"><span data-icon="review"></span>每周复盘</button>
+      <button data-go="science"><span data-icon="science"></span>科学依据</button>
+    </nav>
+    <div class="rail-bottom"><button data-go="data"><span data-icon="settings"></span>设置与备份</button><div class="local"><i></i><span>本地离线工作台</span></div></div>
+  </aside>
+  <div class="workspace">
+    <header class="topbar"><span id="crumb">今日工作台</span><span id="today" class="today"></span></header>
+    <div id="storage-alert" class="storage-alert" role="status" hidden></div>
+    <main id="main" tabindex="-1"></main>
+  </div>
+</div>
+<div id="toast" role="status" aria-live="polite"></div>
+<noscript>请在浏览器中启用 JavaScript，再打开此文件。</noscript>
+<script>
+'use strict';
+const modules = {
+  update:{name:'工作记忆更新',icon:'update',tint:'#eee9ff',tone:'#5d40bd',group:'实验任务改编',desc:'持续跟踪最近出现的信息。',modes:{nback:'字母 N-back',running:'滚动记忆'}},
+  span:{name:'复杂跨度',icon:'span',tint:'#e8efff',tone:'#2857a1',group:'实验任务改编',desc:'交替进行算式判断与字母记忆。',modes:{ospan:'操作广度 · Operation Span'}},
+  math:{name:'渐隐式数学推导',icon:'math',tint:'#e5f5f1',tone:'#176d5d',group:'教学方法',desc:'先读完整示范，再逐步独立求解。',modes:{linear:'一元方程',function:'一次函数',sequence:'等差数列',probability:'不放回抽样'}},
+  reason:{name:'连续推理链',icon:'reason',tint:'#fff0dc',tone:'#844d16',group:'领域练习',desc:'按顺序连接前提、中间结论和最终结论。',modes:{rules:'条件规则',sets:'集合包含',order:'先后约束'}},
+  focus:{name:'单任务注意练习',icon:'focus',tint:'#fceaf2',tone:'#91385e',group:'实践策略',desc:'专注于一个真实任务，记录走神和恢复线索。',modes:{focus:'单任务计时'}}
+};
+const focusTimes = [5,8,12];
+const judgmentSeconds = [9,8,7];
+const nbackSeconds = [2.8,2.8,2.8];
+const firstMode = id => Object.keys(modules[id].modes)[0];
+const focusMinutes = level => focusTimes[level-1];
+const distractors = ['走神','外界打断','主动切换','页面隐藏','手动暂停'];
+const groups = {main:'作答',judgment:'算式判断',recall:'位置回忆',target:'匹配试次',other:'不匹配试次',supported:'补全步骤',independent:'独立题'};
+const sum = (list, selector) => list.reduce((total,item) => total + selector(item),0);
+const esc = value => String(value ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const pad = n => String(n).padStart(2,'0');
+const displayClock = seconds => `${pad(Math.floor(seconds/60))}:${pad(seconds%60)}`;
+const displayMinutes = seconds => seconds ? ((seconds/60).toFixed(1)+' 分钟') : '0 分钟';
+const percent = value => value == null ? '—' : Math.round(value*100)+'%';
+function day(date = new Date()) {
+  return `${date.getFullYear()}-${pad(date.getMonth()+1)}-${pad(date.getDate())}`;
+}
+function shiftDay(key, offset) {
+  const [year,month,date] = key.split('-').map(Number);
+  return day(new Date(year,month-1,date+offset,12));
+}
+function weekday(key) {
+  const [year,month,date] = key.split('-').map(Number);
+  return new Date(year,month-1,date,12).getDay();
+}
+const monday = key => shiftDay(key,-((weekday(key)+6)%7));
+const validDay = value => typeof value === 'string' && /^\d{4}-\d{2}-\d{2}$/.test(value) && shiftDay(value,0) === value;
+const spanDays = key => Array.from({length:7},(_,i)=>shiftDay(key,i));
+function tally(items) {
+  const correct = items.filter(item=>item.result==='correct').length;
+  const omissions = items.filter(item=>item.result==='omission').length;
+  return {total:items.length,correct,omissions,errors:items.length-correct-omissions,accuracy:items.length ? correct/items.length : null};
+}
+const taskTally = (record,...types) => tally(record.items.filter(item=>types.includes(item.kind)));
+const timestamp = () => new Date().toISOString();
+function random(seed) {
+  let state = seed >>> 0;
+  return () => {
+    state = (state + 0x6D2B79F5) >>> 0;
+    let value = Math.imul(state ^ state>>>15, 1|state);
+    value ^= value + Math.imul(value ^ value>>>7,61|value);
+    return ((value ^ value>>>14) >>> 0)/4294967296;
+  };
+}
+const newSeed = () => Math.floor(Math.random()*4294967296);
+const int = (rng,min,max) => min + Math.floor(rng()*(max-min+1));
+const pick = (rng,values) => values[int(rng,0,values.length-1)];
+function shuffle(rng,values) {
+  const copy = [...values];
+  for (let i=copy.length-1;i>0;i--) {
+    const j = int(rng,0,i);
+    [copy[i],copy[j]] = [copy[j],copy[i]];
+  }
+  return copy;
+}
+const alphabet = [...'FHKLMNPRSTVY'];
+function nbackBank(rng,level) {
+  const n = level;
+  const targets = new Set(shuffle(rng,Array.from({length:20},(_,i)=>i+n)).slice(0,7));
+  const letters = [];
+  for (let i=0;i<20+n;i++) {
+    const previous = letters[i-n];
+    const lure = letters[i-(n+1)];
+    const letter = targets.has(i) ? previous :
+      lure && lure !== previous && rng() < .25 ? lure :
+      pick(rng,alphabet.filter(value=>value!==previous));
+    letters.push(letter);
+  }
+  return letters.map((letter,index)=>({letter,lookback:letters[index-n],target:index>=n && letter===letters[index-n]}));
+}
+function runningBank(rng,level) {
+  const count = level+2;
+  return [0,1,2].map(()=> {
+    const length = int(rng,count+2,count+7);
+    const stream = Array.from({length},(_,index)=>index);
+    for (let i=0;i<length;i++) stream[i] = pick(rng,[...'123456789'].filter(x=>x!==stream[i-1]));
+    return {stream,answer:stream.slice(-count),choices:[...'123456789']};
+  });
+}
+function operationBank(rng,level) {
+  return Array.from({length:3},(_,index)=>{
+    const length = level+1+index;
+    const answer = shuffle(rng,alphabet).slice(0,length);
+    const truth = shuffle(rng,Array.from({length},(_,i)=>i%2===0));
+    const problems = answer.map((letter,i)=>{
+      const a=int(rng,2,8), b=int(rng,2,7), c=int(rng,1,9);
+      const add = rng() < .5;
+      const useProduct = level>1 || rng()<.5;
+      const base = useProduct ? a*b : a+b;
+      const value = add ? base+c : base-c;
+      const proposed = value+(truth[i]?0:pick(rng,[-3,-2,-1,1,2,3]));
+      const left = `(${a} ${useProduct?'×':'+'} ${b}) ${add?'+':'−'} ${c}`;
+      return {letter,statement:`${left} = ${proposed}`,value,truth:truth[i]};
+    });
+    return {answer,problems,choices:alphabet};
+  });
+}
+const step = (label,answer,why) => ({label,answer:String(answer),why});
+const signed = value => value<0 ? `− ${-value}` : `+ ${value}`;
+function mathCase(rng,level,mode) {
+  const a=int(rng,2,level===1?5:9), b=int(rng,2,9), x=int(rng,2,15)*(level>1 && rng()<.35?-1:1);
+  if (mode==='linear') {
+    const offset=level>1 && rng()<.5?-b:b;
+    const c=level===1?0:int(rng,1,a-1);
+    const end=(a-c)*x+offset;
+    return {stem:`解方程 ${a}x ${signed(offset)} = ${c ? c+'x '+signed(end):end}。`,steps:[
+      step(c?'把右侧的 x 项移到左侧后，x 的系数是多少？':'等式左边 x 的系数是多少？',a-c,c?`两边减去 ${c}x，得到 ${a-c}x ${signed(offset)} = ${end}。`:`等式左侧是 ${a}x ${signed(offset)}，x 的系数为 ${a}。`),
+      step('把左侧常数移到右侧后，等式右边的数是多少？',end-offset,`两边减去左侧常数 ${offset}，得到 ${a-c}x = ${end-offset}。`),
+      step('x 等于多少？',x,`两边同除以 ${a-c}，得到 x = ${x}。代回原式可检验等式。`)
+    ]};
+  }
+  if (mode==='function') {
+    const p=int(rng,1,8), q=p+int(rng,2,5), t=q+int(rng,1,7);
+    const slope=level>1 && rng()<.5?-a:a;
+    const intercept=level===3?-b:b;
+    return {stem:`一次函数 f(x) = kx + b 满足 f(${p}) = ${slope*p+intercept}、f(${q}) = ${slope*q+intercept}。求 f(${t})。`,steps:[
+      step('斜率 k 等于多少？',slope,`纵向变化量 ${slope*(q-p)} 除以横向变化量 ${q-p}。 `),
+      step('截距 b 等于多少？',intercept,`把 x = ${p} 的值代入，b = ${slope*p+intercept} − (${slope} × ${p}) = ${intercept}。`),
+      step(`f(${t}) 等于多少？`,slope*t+intercept,`将 x = ${t} 代入，${slope} × ${t} ${signed(intercept)} = ${slope*t+intercept}。`)
+    ]};
+  }
+  if (mode==='sequence') {
+    const n=int(rng,5,15), first=x, d=level>1 && rng()<.45?-a:a, k=level===1?2:int(rng,2,4);
+    return {stem:`一个等差数列的首项为 ${first}，第 ${k} 项为 ${first+(k-1)*d}。求前 ${n} 项和。`,steps:[
+      step('公差是多少？',d,`首项至第 ${k} 项经历 ${k-1} 次变化，所以用差值 ${(k-1)*d} 除以 ${k-1}。`),
+      step(`第 ${n} 项是多少？`,first+(n-1)*d,`首项加上 ${n-1} 倍公差，得到 ${first+(n-1)*d}。`),
+      step(`前 ${n} 项和是多少？`,n*(2*first+(n-1)*d)/2,`首尾项求平均后乘项数，即 (${first} + ${first+(n-1)*d}) × ${n} ÷ 2。`)
+    ]};
+  }
+  const red=a+1, blue=b, total=red+blue, different=level>=2, three=level===3;
+  const favorable = three ? 3*red*(red-1)*blue : different ? 2*red*blue : red*(red-1);
+  const all = total*(total-1)*(three?total-2:1);
+  return {stem:`袋里有 ${red} 个红球、${blue} 个蓝球。不放回抽取 ${three?'三':'两'} 次，每次从剩余球中等可能地抽一个。求${three?'恰好两红一蓝（顺序不限）':different?'一红一蓝（顺序不限）':'两次都是红球'}的概率。`,steps:[
+    step('把每个球单独计数，抽取顺序不同也算不同抽法。共有几种抽法？',all,`用每次可选球的数量相乘，即 ${total} × ${total-1}${three?' × '+(total-2):''}。`),
+    step('用同样的计数方式，符合题目颜色要求的抽法有几种？',favorable,three?`红红蓝有 ${red} × ${red-1} × ${blue} 种，蓝球有三个位置，再乘 3。`:different?`红蓝和蓝红各有 ${red} × ${blue} 种，相加得到 ${favorable}。`:`第一次有 ${red} 个红球，第二次剩 ${red-1} 个，乘积是 ${favorable}。`),
+    step('概率是多少？用分数或小数。',`${favorable}/${all}`,`满足要求的有序抽法除以全部有序抽法，得到 ${favorable}/${all}。可以约分。`)
+  ]};
+}
+function mathBank(rng,level,mode) {
+  const cases=[];
+  while (cases.length<4) {
+    const item=mathCase(rng,level,mode);
+    if (!cases.some(other=>other.stem===item.stem)) cases.push(item);
+  }
+  return cases;
+}
+const reasoningContexts = {
+  rules:[
+    ['档案甲','已核验','可入库','已编目','可检索','可外借','采用蓝色标签'],
+    ['样本乙','已封存','可冷藏','已登记','可复测','可转交','使用圆形容器'],
+    ['申请丙','材料齐全','可受理','已编号','可排期','可复核','来自北区'],
+    ['版本丁','已通过单元检查','可进行集成检查','已归档','可部署至测试环境','可提交验收','采用深色主题'],
+    ['照片戊','已获授权','可入选','已标注','可公开展示','可用于宣传','是横向构图'],
+    ['稿件己','已提交修订','可分派复审','可进入编辑流程','可发起校样','可安排发布','附有地图'],
+    ['设备庚','已完成检修','可重新接电','可加载参数','可试运行','可交付使用','使用圆形表盘'],
+    ['路线辛','已完成现场勘察','可制作方案','可发起评审','可确立线路','可安排施工','经过南门']
+  ],
+  sets:[
+    ['藏品 Z','珐琅器','金属工艺品','馆藏实物','登记藏品','可追踪藏品','纸质档案'],
+    ['物种 Z','海豚','鲸类','哺乳动物','脊椎动物','动物','植物'],
+    ['文档 Z','已签署的采购合同','采购合同','合同','法律文件','机构档案','宣传海报'],
+    ['作品 Z','钢琴奏鸣曲','奏鸣曲','乐曲','音乐作品','文艺作品','工程图纸'],
+    ['器件 Z','校准温度计','温度计','测量仪器','实验仪器','实验室资产','消耗品'],
+    ['读物 Z','整理过的访谈笔记','访谈笔记','访谈材料','研究材料','研究档案','气象报告'],
+    ['图形 Z','等边三角形','等腰三角形','三角形','多边形','平面图形','圆'],
+    ['文件 Z','无损录音','录音文件','音频文件','多媒体文件','数字文件','纯文本文件']
+  ],
+  order:[
+    ['实验准备','编号','取样','密封','称量','登记','拍照'],
+    ['馆展准备','核验','修复','布展','试灯','验收','印刷导览'],
+    ['稿件发布','定稿','校对','排版','审阅','上线','整理旧稿'],
+    ['音频制作','录音','剪辑','混音','审听','导出','归还器材'],
+    ['试制流程','备料','组装','检查','包装','交付','整理工具'],
+    ['博物馆数字化','开箱','清洁','扫描','校色','存档','检查照明'],
+    ['陶器制作','揉泥','成型','晾干','施釉','烧制','打扫工作台'],
+    ['校内赛事','报名','分组','抽签','预赛','决赛','归还标志牌']
+  ]
+};
+function reasoningBank(rng,level,mode,recentStems=[]) {
+  const candidates=shuffle(rng,reasoningContexts[mode]);
+  const unseen=candidates.filter(([subject])=>!recentStems.some(prompt=>prompt.startsWith(`情境 · ${subject} · `)));
+  return [...unseen,...candidates.filter(candidate=>!unseen.includes(candidate))].slice(0,2).map(([subject,...words],sample)=>{
+    const depth=level+1, steps=[], premises=[];
+    if (mode==='rules' || mode==='sets') {
+      const sets=mode==='sets';
+      premises.push(sets?`${subject} 属于「${words[0]}」。`:`${subject}${words[0]}。`);
+      for (let i=0;i<depth;i++) {
+        premises.push(sets?`所有「${words[i]}」都属于「${words[i+1]}」。`:`凡是满足「${words[i]}」的对象，也满足「${words[i+1]}」。`);
+        const answer=words[i+1];
+        const options=shuffle(rng,[answer,words[i],words[5],'无法推出新结论']);
+        steps.push({...step(`以「${words[i]}」为这一步的已知条件，直接用一条前提，可以推出 ${subject} 的什么新结论？`,answer,sets?
+          `${subject} 属于「${words[i]}」，而该集合包含于「${answer}」，因此 ${subject} 也属于「${answer}」。包含关系不能反向使用。`:
+          `已知 ${subject}${words[i]}，满足条件「${words[i]}」，所以推出「${answer}」。条件规则不能反向使用。`),options});
+      }
+      if (level>=2) premises.push(sets?`有些目录条目属于「${words[5]}」。`:`有些其他项目${words[5]}。`);
+    } else {
+      for (let i=0;i<depth;i++) {
+        premises.push(`「${words[i]}」早于「${words[i+1]}」。`);
+        const answer=`「${words[0]}」早于「${words[i+1]}」`;
+        const options=shuffle(rng,[answer,`「${words[i+1]}」早于「${words[0]}」`,`「${words[5]}」早于「${words[i+1]}」`,'无法确定这两项的先后']);
+        steps.push({...step(`比较「${words[0]}」和「${words[i+1]}」的顺序。`,answer,i===0?
+          '这个顺序由一条前提直接给出。':`「${words[0]}」早于「${words[i]}」，后者又早于「${words[i+1]}」，由传递性得到答案。`),options});
+      }
+      if (level>=2) premises.push(`「${words[5]}」和其余步骤之间没有已知的先后关系。`);
+    }
+    if (level>1 && sample===1) {
+      const answer='给定前提不足以确定';
+      const conclusion=words[depth];
+      const label=mode==='rules'?`另一个对象满足「${conclusion}」。根据前提，能确定它是否也满足「${words[0]}」吗？`:
+        mode==='sets'?`另一个对象属于「${conclusion}」。根据前提，能确定它是否也属于「${words[0]}」吗？`:
+        `根据前提，能确定「${words[5]}」和「${words[0]}」的先后吗？`;
+      const why=mode==='order'?`前提没有建立「${words[5]}」与已知链条的关系，所以两种先后都与条件相容。`:
+        mode==='sets'?`包含关系从「${words[0]}」指向「${conclusion}」。后一个集合还可以有其他成员，无法反向推断。`:
+        `规则链说明「${words[0]}」足以推出「${conclusion}」。其他路径也可能得到相同结论，不能用结论反推条件。`;
+      const options=mode==='order'?[`「${words[5]}」更早`,`「${words[0]}」更早`,'两项一定同时',answer]:
+        mode==='sets'?[`一定属于「${words[0]}」`,`一定不属于「${words[0]}」`,answer]:
+        [`一定满足「${words[0]}」`,`一定不满足「${words[0]}」`,answer];
+      steps.push({...step(label,answer,why),options:shuffle(rng,options)});
+    }
+    return {stem:`情境 · ${subject}`,premises:level===1?premises:shuffle(rng,premises),steps};
+  });
+}
+function readNumber(text) {
+  const normalized=text.normalize('NFKC').trim().replace(/−/g,'-').replace(/\s*\/\s*/,'/');
+  const [a,b,...extra]=normalized.split('/');
+  const numeric = value => /^[+-]?(?:\d+(?:\.\d*)?|\.\d+)$/.test(value);
+  if (!numeric(a) || extra.length || (b!==undefined && (!numeric(b) || Number(b)===0))) return null;
+  const value = b===undefined ? Number(a) : Number(a)/Number(b);
+  return Number.isFinite(value) ? value : null;
+}
+function scoreForAdaptation(record) {
+  const accuracy = types => taskTally(record,...types).accuracy;
+  if (record.mode==='nback') return Math.min(accuracy(['target']),accuracy(['other']));
+  if (record.mode==='ospan') return Math.min(accuracy(['judgment']),accuracy(['recall']));
+  if (record.module==='math') return accuracy(['independent']);
+  return tally(record.items).accuracy;
+}
+function recommended(records,id,mode) {
+  const relevant = records.filter(r=>r.module===id && r.mode===mode && r.complete && r.events.length===0 &&
+    (id!=='focus' || r.target===focusMinutes(r.level)))
+    .sort((a,b)=>b.finish.localeCompare(a.finish));
+  const latest=relevant[0], previous=relevant[1];
+  if (!latest) return id==='focus'?2:1;
+  if (!previous || latest.level!==previous.level) return latest.level;
+  if (id==='focus') {
+    if ([latest,previous].every(r=>r.outcome==='done' && r.effort && r.effort<=3)) return Math.min(3,latest.level+1);
+    if ([latest,previous].every(r=>r.effort && r.effort>=4)) return Math.max(1,latest.level-1);
+    return latest.level;
+  }
+  const scores=[latest,previous].map(scoreForAdaptation);
+  if (scores.every(score=>score!=null && score>=.8) && [latest,previous].every(r=>!r.effort || r.effort<=3)) return Math.min(3,latest.level+1);
+  if (scores.every(score=>score!=null && score<.6)) return Math.max(1,latest.level-1);
+  return latest.level;
+}
+function dayPlan(records,key) {
+  const d=weekday(key);
+  const index=Math.floor(Date.parse(monday(key)+'T12:00:00Z')/604800000);
+  const positive=(n,m)=>((n%m)+m)%m;
+  const permutations=[['update','math'],['span','reason'],['math','reason'],['update','span'],['reason','math']];
+  const ids=d>=1 && d<=5?[...permutations[d-1],'focus']:[];
+  return ids.map(id=>{
+    const modes=Object.keys(modules[id].modes);
+    const mode=modes[positive(index+d+(id==='update'?d===4?1:0:0),modes.length)];
+    const completed=records.find(r=>r.date===key && r.module===id && r.mode===mode && r.complete);
+    const level=completed?.level ?? recommended(records,id,mode);
+    const minutes=id==='focus'?focusMinutes(level):id==='math'?4:id==='reason'?3:2;
+    return {id,mode,level,minutes,completed};
+  });
+}
+
+const paths = {
+  logo:'<path d="M8 3h8M10 3v6l-5 8.5A2.3 2.3 0 0 0 7 21h10a2.3 2.3 0 0 0 2-3.5L14 9V3M8 14h8"/><path d="M11 17h.01m3 2h.01"/>',
+  home:'<path d="M3 10.5 12 3l9 7.5V21h-6v-7H9v7H3z"/>',
+  library:'<rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/>',
+  chart:'<path d="M3 3v18h18M7 16l4-5 4 2 6-8"/>',
+  review:'<rect x="3" y="5" width="18" height="16" rx="2"/><path d="M7 3v4m10-4v4M3 10h18m-13 5 2.5 2.5L16 13"/>',
+  science:'<path d="M3 5a3 3 0 0 1 3-2h5a1 1 0 0 1 1 1v17a2 2 0 0 0-2-2H3zm18 0a3 3 0 0 0-3-2h-5a1 1 0 0 0-1 1m0 17a2 2 0 0 1 2-2h7V5"/>',
+  settings:'<circle cx="12" cy="12" r="3"/><path d="M10 3h4l.6 2.4 2 .9 2.2-1.2 2 3.5-1.8 1.7v2.4l1.8 1.7-2 3.5-2.2-1.2-2 .9L14 21h-4l-.6-2.4-2-.9-2.2 1.2-2-3.5 1.8-1.7v-2.4L3.2 8.6l2-3.5 2.2 1.2 2-.9z"/>',
+  update:'<path d="M3 10a8.5 8.5 0 0 1 14.5-4L21 9m0-5v5h-5m5 5a8.5 8.5 0 0 1-14.5 4L3 15m0 5v-5h5"/>',
+  span:'<path d="M12 3l9 5-9 5-9-5zm-9 9 9 5 9-5M3 16l9 5 9-5"/>',
+  math:'<path d="M9 3h12M9 8h10M9 13h7M3 9l4 12 3-8"/>',
+  reason:'<rect x="3" y="3" width="6" height="6" rx="1"/><rect x="15" y="15" width="6" height="6" rx="1"/><path d="M6 9v9h9m-7-6h10V6m-3 3 3-3 3 3"/>',
+  focus:'<circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5"/><circle cx="12" cy="12" r="1"/>',
+  arrow:'<path d="M4 12h15m-6-6 6 6-6 6"/>',
+  clock:'<circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/>',
+  check:'<path d="m5 12 4 4L19 6"/>'
+};
+const icon = name => `<svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">${paths[name]||''}</svg>`;
+const tileIcon = id => `<span class="tile-icon" style="--tint:${modules[id].tint};--tone:${modules[id].tone}">${icon(modules[id].icon)}</span>`;
+const button = (label,action,extra='',cls='') => `<button type="button" class="btn ${cls}" data-action="${action}" ${extra}>${label}</button>`;
+const linkButton = (label,view) => `<button type="button" class="text-btn" data-go="${view}">${label}</button>`;
+const modeName = (id,mode) => modules[id].modes[mode];
+const chip = (text,cls='')=>`<span class="chip ${cls}">${text}</span>`;
+const option = (value,label,selected)=>`<option value="${value}" ${String(value)===String(selected)?'selected':''}>${label}</option>`;
+const heading = (title,info='')=>`<header class="page-heading"><h1>${title}</h1>${info?`<p>${info}</p>`:''}</header>`;
+const empty = text => `<div class="empty">${text}</div>`;
+const main = document.getElementById('main');
+const storageKey = 'cognitive-lab:v1';
+const defaults = () => ({schema:1,records:[],settings:{weeklyGoal:5,lastBackup:null},reviews:{}});
+let db = defaults();
+let writable = true;
+let dirty = false;
+let missedLoad = false;
+let toastTimer;
+let page='home', setup=null, session=null, result=null;
+let dateKey=day(), reviewWeek=monday(dateKey);
+let filters={module:'update',mode:'nback',level:1,range:30,hModule:'all',hRange:90,hPage:0};
+const labels={home:'今日工作台',library:'训练模块',history:'训练记录',review:'每周复盘',science:'科学依据',data:'设置与备份',setup:'训练准备',train:'正在训练',result:'训练小结'};
+document.querySelectorAll('[data-icon]').forEach(node=>node.innerHTML=icon(node.dataset.icon));
+
+function assert(condition) {
+  if (!condition) throw new Error('文件结构或版本不符合本工作台的备份格式。');
+}
+const bounded = (value,max) => typeof value==='string' && value.length<=max;
+const inRange = (n,min,max) => Number.isInteger(n) && n>=min && n<=max;
+const iso = value => bounded(value,32) && /^\d{4}-\d\d-\d\dT\d\d:\d\d:\d\d\.\d{3}Z$/.test(value) && !Number.isNaN(Date.parse(value));
+const own = (obj,key) => typeof key==='string' && Object.hasOwn(obj,key);
+function sanitizeDb(raw) {
+  assert(raw && raw.schema===1 && Array.isArray(raw.records) && raw.records.length<=30000);
+  const records=raw.records.map(r=>{
+    assert(r && bounded(r.id,80) && /^[\w-]+$/.test(r.id) && validDay(r.date) && iso(r.start) && iso(r.finish) && own(modules,r.module) && own(modules[r.module].modes,r.mode));
+    assert(inRange(r.level,1,3) && inRange(r.seconds,0,604800) && inRange(r.seed,0,4294967295) && typeof r.complete==='boolean');
+    assert(r.effort===null || inRange(r.effort,1,5));
+    assert(bounded(r.note,800) && bounded(r.goal,300) && bounded(r.cue,300) && ['', 'done','partial','not-done'].includes(r.outcome));
+    assert(Array.isArray(r.items) && r.items.length<=120 && Array.isArray(r.events) && r.events.length<=1000);
+    const items=r.items.map(i=>{
+      assert(i && own(groups,i.kind) && ['correct','error','omission'].includes(i.result) && bounded(i.prompt,350) && bounded(i.expected,100) && bounded(i.given,150) && bounded(i.why,360));
+      return {kind:i.kind,result:i.result,prompt:i.prompt,expected:i.expected,given:i.given,why:i.why};
+    });
+    const events=r.events.map(e=>{
+      assert(e && distractors.includes(e.type) && inRange(e.at,0,604800) && bounded(e.cue,300));
+      return {type:e.type,at:e.at,cue:e.cue};
+    });
+    assert(r.module!=='focus' || (items.length===0 && inRange(r.target,1,60)));
+    return {id:r.id,date:r.date,start:r.start,finish:r.finish,module:r.module,mode:r.mode,level:r.level,seed:r.seed,
+      seconds:r.seconds,complete:r.complete,effort:r.effort,note:r.note,goal:r.goal,cue:r.cue,outcome:r.outcome,
+      target:r.module==='focus'?r.target:0,items,events};
+  });
+  const cfg=raw.settings;
+  assert(cfg && inRange(cfg.weeklyGoal,1,7) && (cfg.lastBackup===null || validDay(cfg.lastBackup)));
+  assert(raw.reviews && typeof raw.reviews==='object' && !Array.isArray(raw.reviews));
+  const reviews={};
+  for (const [date,note] of Object.entries(raw.reviews)) {
+    assert(validDay(date) && monday(date)===date && bounded(note,1200));
+    reviews[date]=note;
+  }
+  return {schema:1,records:[...new Map(records.map(r=>[r.id,r])).values()],settings:{weeklyGoal:cfg.weeklyGoal,lastBackup:cfg.lastBackup},reviews};
+}
+function readStorage() {
+  const text=localStorage.getItem(storageKey);
+  return text===null?defaults():sanitizeDb(JSON.parse(text));
+}
+function mergeRecords(older,newer) {
+  return [...new Map([...older,...newer].map(r=>[r.id,r])).values()];
+}
+function refreshStorage() {
+  try {
+    const disk=readStorage();
+    if (!dirty) db=disk;
+    missedLoad=false;
+  } catch {
+    missedLoad=true;
+  }
+}
+function commit(mutator) {
+  let base=db;
+  let mayWrite=true;
+  try {
+    const disk=readStorage();
+    base=dirty?{...db,records:mergeRecords(disk.records,db.records),reviews:{...disk.reviews,...db.reviews}}:disk;
+    missedLoad=false;
+  } catch {
+    missedLoad=true;
+    mayWrite=false;
+  }
+  db=mutator(base);
+  dirty=true;
+  if (mayWrite) {
+    try {
+      localStorage.setItem(storageKey,JSON.stringify(db));
+      writable=true;
+      dirty=false;
+    } catch {
+      writable=false;
+    }
+  }
+  updateWarning();
+  return !dirty;
+}
+function updateWarning() {
+  const node=document.getElementById('storage-alert');
+  node.hidden=writable && !missedLoad && !dirty;
+  node.textContent=missedLoad?'无法读取浏览器存储。请检查浏览器权限或使用原浏览器、目录与配置文件，并立即导出当前页面中的新记录。':
+    '浏览器存储不可写或空间已满。当前页面仍保有本次数据，请在关闭前导出 JSON 备份。';
+}
+function toast(message) {
+  clearTimeout(toastTimer);
+  const node=document.getElementById('toast');
+  node.textContent=message;
+  toastTimer=setTimeout(()=>node.textContent='',4300);
+}
+refreshStorage();
+try {
+  const probe=storageKey+':test';
+  localStorage.setItem(probe,'1');
+  localStorage.removeItem(probe);
+} catch { writable=false; }
+updateWarning();
+window.addEventListener('storage',e=>{
+  if (e.key===storageKey || e.key===null) {
+    refreshStorage();
+    updateWarning();
+    if (['home','history','library'].includes(page)) render(false);
+  }
+});
+window.addEventListener('beforeunload',e=>{
+  if (session || dirty) { e.preventDefault(); e.returnValue=''; }
+});
+function render(moveFocus=true) {
+  dateKey=day();
+  document.getElementById('today').innerHTML=icon('review')+new Intl.DateTimeFormat('zh-CN',{month:'long',day:'numeric',weekday:'long'}).format(new Date());
+  document.getElementById('crumb').textContent=labels[page];
+  document.querySelectorAll('.rail [data-go]').forEach(node=>{
+    if (node.dataset.go===page) node.setAttribute('aria-current','page');
+    else node.removeAttribute('aria-current');
+  });
+  const view={home,library,history,review,science,data,setup:setupView,train:trainingView,result:resultView}[page];
+  main.innerHTML=view();
+  if (page==='home') drawHero();
+  if (moveFocus) {
+    if (page!=='train') window.scrollTo(0,0);
+    const desired=main.querySelector('[data-autofocus]');
+    (desired||main).focus();
+  }
+  if (page==='train') paintTimer();
+}
+function go(view) {
+  page=view;
+  render();
+}
+function drawHero() {
+  const canvas=document.getElementById('hero-canvas');
+  canvas.width=720; canvas.height=253;
+  const ctx=canvas.getContext('2d');
+  if (!ctx) return;
+  const rng=random(1455);
+  for(let x=8;x<720;x+=19) for(let y=17;y<254;y+=19) {
+    ctx.fillStyle=`rgba(206,184,255,${.045+x/6500})`;
+    ctx.fillRect(x,y,1.5,1.5);
+  }
+  const glow=ctx.createRadialGradient(510,126,8,510,126,193);
+  glow.addColorStop(0,'rgba(165,110,255,.31)');
+  glow.addColorStop(1,'rgba(165,110,255,0)');
+  ctx.fillStyle=glow;ctx.fillRect(0,0,720,253);
+  for(let band=0;band<6;band++){
+    const tilt=-.44+band*.145, radius=100+band*20;
+    ctx.beginPath();ctx.ellipse(507,128,radius,27+band*12,tilt,0,Math.PI*2);
+    ctx.strokeStyle='rgba(217,190,255,.19)';ctx.stroke();
+    for(let i=0;i<29;i++){
+      const a=rng()*Math.PI*2, dx=radius*Math.cos(a),dy=(27+band*12)*Math.sin(a);
+      const x=507+dx*Math.cos(tilt)-dy*Math.sin(tilt);
+      const y=128+dx*Math.sin(tilt)+dy*Math.cos(tilt);
+      ctx.beginPath();ctx.arc(x,y,i%8===0?3:1.35,0,Math.PI*2);
+      ctx.fillStyle=i%5===0?'#96e9db':`rgba(217,190,255,${.29+rng()*.6})`;ctx.fill();
+    }
+  }
+}
+function uniqueDays(records) {return new Set(records.map(r=>r.date)).size;}
+const sorted = records => [...records].sort((a,b)=>b.finish.localeCompare(a.finish));
+const between = (records,start,end) => records.filter(r=>r.date>=start && r.date<=end);
+const completed = records => records.filter(r=>r.complete);
+const minutes = records => Math.round(sum(records,r=>r.seconds)/60);
+const todays = () => dayPlan(db.records,dateKey);
+function sessionButton(id,mode,level,label='开始',cls='') {
+  return button(label,'prepare',`data-module="${id}" data-mode="${mode}" data-level="${level}"`,cls);
+}
+function weekStrip(key,records) {
+  return `<div class="week-dots">${spanDays(key).map((date,i)=>{
+    const active=records.some(r=>r.date===date && r.complete);
+    return `<div><span>周${'一二三四五六日'[i]}</span><b class="${active?'done':''} ${date===dateKey?'current':''}" aria-label="${date} ${active?'已训练':'暂无完成训练'}" ${date===dateKey?'aria-current="date"':''}>${active?'✓':Number(date.slice(-2))}</b></div>`;
+  }).join('')}</div>`;
+}
+function home() {
+  const plan=todays(), pending=plan.find(item=>!item.completed);
+  const count=plan.filter(p=>p.completed).length;
+  const week=between(db.records,monday(dateKey),shiftDay(monday(dateKey),6));
+  return `${heading('个人认知训练工作台','练习维持目标、更新中间信息，以及中断后回到原任务。')}
+  <section class="hero" aria-labelledby="hero-title">
+    <canvas id="hero-canvas" aria-hidden="true"></canvas>
+    <div><div class="eyebrow">${icon('clock')}${plan.length?'工作日轮换 · 难度自适应':'周末 · 自选训练'}</div>
+    <h2 id="hero-title">${plan.length?(pending?'开始今日训练':'今日计划已完成'):'给今天留一段专注时间'}</h2>
+    <p>${plan.length?`今日共 ${plan.length} 项 · 预计 ${sum(plan,p=>p.minutes)} 分钟 · 已完成 ${count}/${plan.length}`:'从训练模块里任选一项，也可以回看本周练习。'}</p>
+    ${pending?sessionButton(pending.id,pending.mode,pending.level,'开始下一项 '+icon('arrow'),'primary'):`<button class="btn primary" data-go="${plan.length?'history':'library'}">${plan.length?'查看训练记录':'选择训练模块'} ${icon('arrow')}</button>`}</div>
+  </section>
+  <div class="dash-grid">
+    <section class="card"><div class="card-head"><h2>今日计划</h2>${chip(plan.length?`${count} / ${plan.length} 已完成`:'休息日','neutral')}</div>
+    ${plan.length?`<ol class="plan-list">${plan.map(p=>`<li class="plan-row">${tileIcon(p.id)}<div><strong>${modules[p.id].name}</strong><div class="sub">${modeName(p.id,p.mode)} · 难度 ${p.level} · 约 ${p.minutes} 分钟</div></div>${p.completed?chip('✓ 已完成','good'):sessionButton(p.id,p.mode,p.level,'开始',p===pending?'primary':'')}</li>`).join('')}</ol>`:empty('周一至周五生成计划。周末的自选练习也会计入训练记录。')}</section>
+    <section class="card"><div class="card-head"><h2>本周概览</h2>${linkButton('查看周报 →','review')}</div>
+    <div class="stats"><div><strong>${uniqueDays(completed(week))}<small> / ${db.settings.weeklyGoal}</small></strong><small>训练天数</small></div><div><strong>${completed(week).length}</strong><small>完成场次</small></div><div><strong>${minutes(week)}</strong><small>累计分钟</small></div></div>
+    ${weekStrip(monday(dateKey),week)}<p class="hint">${week.length?'紫色标记表示当天完成过至少一场。':'完成第一场后，这里会显示本周进度。'}</p></section>
+  </div>
+  <section class="module-section"><div class="card-head"><h2>训练模块</h2>${linkButton('浏览全部 →','library')}</div><div class="module-grid">
+    ${Object.entries(modules).map(([id,m])=>`<button class="module-tile" data-action="prepare" data-module="${id}" data-mode="${firstMode(id)}">${tileIcon(id)}<strong class="module-name">${m.name}</strong><span class="sub">${m.group}</span></button>`).join('')}
+  </div></section>`;
+}
+function library() {
+  return `${heading('训练模块','选择一种任务。你可以在开始前调整难度。')}<div class="wide-grid">${Object.entries(modules).map(([id,m])=>
+    `<section class="card stack">${tileIcon(id)}<div><div class="chips">${chip(m.group)}</div><h2>${m.name}</h2><p class="lede">${m.desc}</p></div><div class="row-gap">${Object.entries(m.modes).map(([mode,label])=>
+      sessionButton(id,mode,recommended(db.records,id,mode),label+' '+icon('arrow'))).join('')}</div></section>`).join('')}</div>`;
+}
+const nbackReference = level => level===1?'上一个字母':`${level} 个位置之前的字母`;
+const nbackExplanation = (level, earlier, current) => `当前字母是 ${current}，${nbackReference(level)}是 ${earlier}。`;
+const instructions = {
+  nback:['1-back 比较当前字母和上一个字母。2-back 和 3-back 分别比较 2 个和 3 个位置之前的字母。从当前字母往回数，上一个算第 1 个。','例如 F → H → F 播到最后一个 F 时，1-back 比的是 H，应答「不同」。2-back 比的是开头的 F，应答「相同」。'],
+  running:['数字逐个出现，什么时候停止不会提前提示。序列结束后，只回忆最后指定数量的数字，并按它们出现的先后顺序填写。','例如 4 → 9 → 2 → 5 → 8。若要求最后 3 个，依次填 2、5、8。想不起某一位时，点「跳过此位置」。'],
+  ospan:['先判断屏幕上的等式是否成立，再记住随后出现的字母。每组结束后，按字母出现的先后顺序填写。','按 F 表示等式成立，按 J 表示不成立。超过限时会记为漏答，随后仍会显示字母。小结会分别显示两项正确率。'],
+  math:['先看一道完整示范，再做三道同类型新题。第一道新题补最后一步，第二道补最后两步，第三道只给题干，请直接填最终答案。','答案框只填数值，可用草稿。概率题可填分数或小数。若用小数，保留至少四位，允许与准确值相差 0.0001。提交或跳过后会显示解法。'],
+  reason:['把题中列出的前提视为成立，从已知条件一步一步推出结论。作答时可以回看前提。','每一步提交后都会给出正确结论和理由。下一步从给出的正确结论继续。'],
+  focus:['写下一个可检查的目标，例如「阅读第 4 节并写三条笔记」。可切到阅读器或用纸笔继续做同一任务，计时会继续。','「记录一次中断」只记事件。要停表，请点「暂停」。计时结束后，按实际完成情况填写目标达成程度。']
+};
+function levelHint(id,mode,level) {
+  if (mode==='nback') return `${level}-back · 20 个计分试次`;
+  if (mode==='running') return `3 组 · 每组回忆末尾 ${level+2} 个数字`;
+  if (mode==='ospan') return `3 组 · 每组 ${level+1}–${level+3} 个字母 · 判断限时 ${judgmentSeconds[level-1]} 秒`;
+  if (id==='math') return `4 道同类题 · ${['基础数值与程序','混合数值或多条件','更复杂数值或情境'][level-1]}`;
+  if (id==='reason') return `2 个情境 · 各 ${level+1} 步${level>1?' · 加一道能否推出结论的题':''}`;
+  return `${focusMinutes(level)} 分钟默认时段`;
+}
+function setupView() {
+  const {id,mode,level,goal='',duration=focusMinutes(level)}=setup;
+  const m=modules[id];
+  const [a,b]=instructions[id==='math'||id==='reason'?id:mode];
+  return `<div class="training">${heading(m.name,modeName(id,mode))}
+    <section class="card stage"><div class="chips">${chip(m.group)}</div><h2>先熟悉规则</h2><p>${a}</p><p>${b}</p>
+    ${mode==='nback'?'<p>每个字母显示 2.8 秒。开头只看字母，出现判断问题后开始作答。按 F 选「相同」，按 J 选「不同」。字母按固定节奏更换，计分时超时未选记为漏答。</p>':''}
+    <form id="start-form" class="stack" style="margin-top:17px">
+      <label class="field compact"><strong>训练难度</strong><select name="level" id="level">${[1,2,3].map(l=>option(l,`难度 ${l} · ${levelHint(id,mode,l)}`,level)).join('')}</select></label>
+      ${id==='focus'?`<label class="field"><strong>这段时间要完成什么？</strong><input name="goal" maxlength="300" required value="${esc(goal)}" placeholder="例：完成一段证明并标出不确定的步骤"></label>
+      <label class="field compact"><strong>本次时段（分钟）</strong><select name="duration">${[5,8,12,15,20,25,30].map(l=>option(l,l,duration)).join('')}</select></label>`:''}
+      <div class="actions"><button class="btn primary" type="submit">开始训练 ${icon('arrow')}</button><button type="button" class="btn" data-go="library">回到模块</button></div>
+    </form></section></div>`;
+}
+const msNow=()=>performance.now();
+const earned = s => Math.floor((s.elapsed+(s.activeAt===null?0:msNow()-s.activeAt))/1000);
+const marker = (label,progress) => `<div class="flex-between"><span class="eyebrow">${label}</span>${progress?chip(progress,'neutral'):''}</div>`;
+const isActive = () => session && !session.paused && !session.finished;
+function answerItem(kind,prompt,expected,given,why,correct = expected===given) {
+  const item={kind,prompt:prompt.slice(0,350),expected:String(expected),given:String(given).slice(0,150),why:why.slice(0,360),
+    result:given===''?'omission':correct?'correct':'error'};
+  session.items.push(item);
+  return item;
+}
+function phase(s,name,seconds=0) {
+  s.phase=name;
+  s.phaseEnds=seconds ? msNow()+seconds*1000 : null;
+  s.phaseResponse='';
+}
+function begin(form) {
+  const {id,mode}=setup;
+  const level=Number(form.get('level'));
+  const goal=String(form.get('goal')||'').trim();
+  if (id==='focus' && !goal) {toast('请写下一个具体任务目标。');return;}
+  const seed=newSeed(), rng=random(seed), start=timestamp();
+  const s={id:'s-'+Date.now().toString(36)+'-'+seed.toString(36),date:day(),start,module:id,mode,level,seed,
+    index:0,part:0,position:0,items:[],events:[],activeAt:msNow(),elapsed:0,paused:false,finished:false,
+    goal,cue:'',target:id==='focus'?Number(form.get('duration')):0,phaseEnds:null,phaseResponse:'',feedback:null,showPremises:level!==3};
+  if (mode==='nback') {
+    s.bank=nbackBank(rng,level);
+    phase(s,'nback',nbackSeconds[level-1]);
+  } else if (mode==='running') {
+    s.bank=runningBank(rng,level);
+    phase(s,'digit',1.25);
+  } else if (mode==='ospan') {
+    s.bank=operationBank(rng,level);
+    phase(s,'judgment',judgmentSeconds[level-1]);
+  } else if (id==='math') {
+    s.bank=mathBank(rng,level,mode);
+    phase(s,'worked');
+  } else if (id==='reason') {
+    const recentStems=sorted(db.records.filter(r=>r.mode===mode)).slice(0,3).flatMap(r=>r.items.map(i=>i.prompt));
+    s.bank=reasoningBank(rng,level,mode,recentStems);
+    phase(s,'premises');
+  } else {
+    s.bank=[];
+    phase(s,'focus');
+  }
+  session=s;
+  go('train');
+}
+function stopClock(s) {
+  if (s.activeAt!==null) s.elapsed+=msNow()-s.activeAt;
+  s.activeAt=null;
+}
+function finish(complete) {
+  const s=session;
+  if (s.finished) return;
+  stopClock(s);
+  s.finished=true;
+  s.complete=complete;
+  s.finish=timestamp();
+  s.phaseEnds=null;
+  s.seconds=Math.min(604800,Math.floor(s.elapsed/1000));
+  if (s.module==='focus' && complete) s.seconds=s.target*60;
+  render();
+}
+function recordEvent(type,cue='') {
+  if (session.events.length>=1000) return;
+  session.events.push({type,at:Math.min(604800,earned(session)),cue});
+  if (cue) session.cue=cue;
+}
+function pauseSession(type) {
+  if (!isActive()) return;
+  const s=session;
+  s.remainingPhase=s.phaseEnds==null?null:Math.max(0,s.phaseEnds-msNow());
+  stopClock(s);
+  recordEvent(type);
+  s.paused=true;
+  render();
+}
+function resumeSession() {
+  const s=session;
+  s.activeAt=msNow();
+  s.phaseEnds=s.remainingPhase==null?null:msNow()+Math.max(s.remainingPhase,150);
+  s.paused=false;
+  render();
+}
+function recallStage(s) {
+  const current=s.bank[s.index];
+  return `${marker('按序回忆',`第 ${s.index+1} / ${s.bank.length} 组`)}
+    <h2>第 ${s.position+1} / ${current.answer.length} 个位置</h2>
+    <p>${s.mode==='running'?`只填刚才最后出现的 ${current.answer.length} 个数字，从这几个数中最早出现的填起。`:'按本组字母出现的先后顺序填写。'}</p>
+    <p class="stem">已填写 ${s.recallGiven.length ? s.recallGiven.map(x=>esc(x)||'＿').join('　') : '—'}</p>
+    <div class="choice-row">${current.choices.map(ch=>button(ch,'recall',`data-value="${ch}"`)).join('')}
+      ${button('跳过此位置','recall','data-value=""')}</div>`;
+}
+function binaryChoices(yes,no,selected,disabled=false) {
+  return `<div class="choice-row">${[yes,no].map((label,i)=>{
+    const value=i===0?'yes':'no';
+    return button(`${label} <span class="hint">[${i===0?'F':'J'}]</span>`,'binary',
+      `data-value="${value}" aria-keyshortcuts="${i===0?'F':'J'}" ${disabled?'disabled':''}`,selected===value?'selected':'');
+  }).join('')}</div>`;
+}
+function feedback(item) {
+  return `<div class="feedback ${item.result==='correct'?'correct':'error'}" role="status">
+    <strong>${{correct:'正确',error:'答错',omission:'跳过／漏答'}[item.result]} · ${esc(item.expected)}</strong><p>${esc(item.why)}</p></div>`;
+}
+function mathStage(s) {
+  const current=s.bank[s.index];
+  const labels=['完整示范','补全最后一步','补全两个步骤','独立解题'];
+  const independent=s.index===3;
+  const currentStep=independent?current.steps.at(-1):current.steps[s.part];
+  const shown=s.index===0?3:independent?0:Math.max(3-s.index,s.part);
+  return `${marker(labels[s.index],`第 ${s.index+1} / 4 题`)}<h2>${modeName(s.module,s.mode)}</h2><p class="stem">${esc(current.stem)}</p>
+    ${shown?`<ol class="steps">${current.steps.slice(0,shown).map(x=>`<li>${esc(x.why)}</li>`).join('')}</ol>`:''}
+    ${s.index===0?`<div class="actions">${button('开始补全练习','advance','','primary')}</div>`:
+      s.phase==='feedback'?`${feedback(s.feedback)}<div class="actions">${button(independent?'查看训练小结':'下一步','advance','','primary')}</div>`:
+      `<form id="math-form" class="row-gap"><label class="field compact"><strong>${independent?'最终答案':`第 ${s.part+1} 步 · ${esc(currentStep.label)}`}</strong>
+      <input name="answer" maxlength="100" autocomplete="off" required data-autofocus value="${esc(s.answerDraft)}" placeholder="输入数值，例如 −4 或 3/8"></label>
+      <div class="actions"><button class="btn primary" type="submit">提交答案</button>${button(independent?'跳过此题':'跳过此步','skip-answer')}</div></form>`}`;
+}
+function reasonStage(s) {
+  const current=s.bank[s.index];
+  const currentStep=current.steps[s.part];
+  const premises=`<ol class="steps">${current.premises.map(text=>`<li>${esc(text)}</li>`).join('')}</ol>`;
+  const progress=`情境 ${s.index+1} / ${s.bank.length} · 步骤 ${s.part+1} / ${current.steps.length}`;
+  return `${marker('逐步推理',progress)}<h2>${esc(current.stem)}</h2>
+    ${s.phase==='premises'?`<p>阅读题内前提，准备从第一步开始。</p>${premises}<div class="actions">${button('开始推导','advance','','primary')}</div>`:
+      `<details ${s.showPremises?'open':''} id="premises"><summary>查看前提</summary>${premises}</details>
+      ${s.part>0?`<p class="stem">前几步的正确结论 · ${current.steps.slice(0,s.part).map(x=>esc(x.answer)).join(' → ')}</p>`:''}
+      <p style="margin-top:12px"><strong>${esc(currentStep.label)}</strong></p>
+      ${s.phase==='feedback'?`${feedback(s.feedback)}<div class="actions">${button('继续','advance','','primary')}</div>`:
+      `<div class="choice-grid">${currentStep.options.map((value,i)=>button(esc(value),'reason',`data-index="${i}"`,'choice')).join('')}
+        ${button('跳过此步','skip-answer','','ghost')}</div>`}`}`;
+}
+function focusStage(s) {
+  return `${marker('单任务计时',`目标时段 ${s.target} 分钟`)}<p class="focus-goal"><strong>本次目标</strong>　${esc(s.goal)}</p>
+    <div class="numeric countdown" id="focus-countdown" aria-label="剩余时间"></div>
+    <p>如果被打断，可记下类型和恢复时的第一步。记录中断时，倒计时会继续。</p>
+    <form id="event-form" class="row-gap" style="margin-top:12px">
+      <div class="filters"><label class="field"><strong>中断类型</strong><select name="kind">${distractors.slice(0,3).map(x=>option(x,x)).join('')}</select></label>
+      <label class="field" style="flex:1"><strong>恢复线索（可选）</strong><input name="cue" maxlength="300" placeholder="例：回到证明第 3 行，核对变量取值范围"></label></div>
+      <div class="actions"><button class="btn" type="submit">记录一次中断</button><span id="event-count" class="sub">${s.events.length} 次已记录</span></div></form>
+    ${s.cue?`<p class="feedback"><strong>最近的恢复线索</strong>　${esc(s.cue)}</p>`:''}`;
+}
+function trainStage(s) {
+  const current=s.bank[s.index];
+  if (s.paused) return `<h2>训练已暂停</h2><p>暂停期间不计入有效训练时间。</p>
+    <form id="resume-form" class="row-gap" style="margin-top:12px">
+    <label class="field"><strong>恢复线索（可选）</strong><input name="cue" maxlength="300" placeholder="回到任务后，先做什么？"></label>
+    <div class="actions"><button class="btn primary" type="submit">继续训练</button></div></form>`;
+  if (s.phase==='recall') return recallStage(s);
+  if (s.mode==='nback') {
+    const warm=s.index<s.level;
+    return `${marker(`${s.level}-back`,warm?`准备字母 ${s.index+1} / ${s.level}`:`第 ${s.index-s.level+1} / 20 个计分字母`)}
+      <h2>${warm?'先记住这个字母':`当前字母和${s.level===1?'': ' '}${nbackReference(s.level)}一样吗？`}</h2>
+      <div class="stimulus numeric" role="status">${current.letter}</div>
+      ${warm?'<p class="hint">准备阶段无需回答。</p>':binaryChoices('相同','不同',s.phaseResponse,!!s.phaseResponse)}
+      ${s.phaseResponse?'<p class="hint" role="status">已记录。等待下一个字母。</p>':''}`;
+  }
+  if (s.mode==='running') return `${marker('滚动记忆',`第 ${s.index+1} / 3 组`)}
+    <h2>记住最近出现的 ${s.level+2} 个数字</h2><div class="stimulus numeric" role="status">${current.stream[s.part]}</div><p class="hint">每出现一个新数字，就更新要记的数字。序列结束后再回答。</p>`;
+  if (s.mode==='ospan') {
+    const task=current.problems[s.part];
+    return `${marker(s.phase==='letter'?'记住字母':'判断算式',`第 ${s.index+1} / 3 组 · 第 ${s.part+1} / ${current.answer.length} 项`)}
+      <h2>${s.phase==='letter'?'请记住这个字母':'等式成立吗？'}</h2>
+      <div class="stimulus ${s.phase==='letter'?'':'small'} numeric" role="status">${s.phase==='letter'?task.letter:esc(task.statement)}</div>
+      ${s.phase==='judgment'?binaryChoices('成立','不成立',''):'<p class="hint">本组完成后，按字母出现的先后顺序填写。</p>'}`;
+  }
+  if (s.module==='math') return mathStage(s);
+  if (s.module==='reason') return reasonStage(s);
+  return focusStage(s);
+}
+function reportStats(r) {
+  const scores=tally(r.items);
+  const group=(label,...types)=>`<span class="chip neutral">${label} ${percent(taskTally(r,...types).accuracy)}</span>`;
+  return `<div class="stats"><div><strong>${r.module==='focus'?'—':percent(scores.accuracy)}</strong><small>${r.module==='focus'?'无测验计分':'正确率'}</small></div>
+    <div><strong>${displayClock(r.seconds)}</strong><small>有效时间</small></div>
+    <div><strong>${r.events.length}</strong><small>中断／暂停次数</small></div></div>
+    <div class="chips" style="margin-top:8px">${r.module!=='focus'?
+      chip(`正确 ${scores.correct}/${scores.total} · 错误 ${scores.errors} · 漏答 ${scores.omissions}`,'neutral'):''}
+      ${r.mode==='ospan'?group('算式判断','judgment')+group('位置回忆','recall'):''}
+      ${r.mode==='nback'?group('匹配试次','target')+group('不匹配试次','other'):''}
+      ${r.module==='math'?group('补全步骤','supported')+group('独立题','independent'):''}</div>`;
+}
+const effortLabels=['很轻松','较轻松','适中','较费力','很费力'];
+const outcomeLabels={done:'目标已达成',partial:'部分达成','not-done':'目标未达成'};
+function reflection(s) {
+  return `<h2>${s.complete?'训练已结束':'记录这段练习'}</h2>${reportStats(s)}
+    ${!s.complete?`<p class="hint">提前结束也可以保存。${s.mode==='nback'?'若在当前字母的 2.8 秒作答窗口结束前停下，这个字母不计分。':s.module==='focus'?'本场时长按停表前的实际计时记录。':'统计只包含已计分的项目。'}</p>`:''}
+    <form id="save-form" class="row-gap" style="margin-top:13px">
+      ${s.module==='focus'?`<label class="field"><strong>目标完成情况</strong><select name="outcome" required><option value="">请选择</option>${Object.entries(outcomeLabels).map(([key,value])=>option(key,value)).join('')}</select></label>`:''}
+      <label class="field"><strong>这场训练有多费力？</strong><select name="effort"><option value="">未填写</option>
+      ${effortLabels.map((value,i)=>option(i+1,`${i+1} · ${value}`)).join('')}</select></label>
+      <label class="field"><strong>训练备注（可选）</strong><textarea name="note" maxlength="800" rows="2" placeholder="哪里丢了步骤？下一次准备怎样做？"></textarea></label>
+      <div class="actions"><button class="btn primary" type="submit">保存记录</button>${button('放弃本次记录','discard','','ghost')}</div>
+    </form>`;
+}
+function trainingView() {
+  const s=session, m=modules[s.module];
+  return `<div class="training">
+    <div class="train-head"><div class="flex-between"><div><h1>${m.name}</h1><p class="lede">${modeName(s.module,s.mode)} · 难度 ${s.level}</p></div>
+    ${s.finished?'':`<span class="clock" id="elapsed" aria-label="有效训练时间"></span>`}</div>
+    ${s.finished?'':'<div class="progress" aria-hidden="true"><span id="progress"></span></div>'}</div>
+    <section class="card stage" tabindex="-1" ${s.finished?'data-autofocus':''}>${s.finished?reflection(s):trainStage(s)}</section>
+    ${s.finished?'':`<div class="train-controls"><div class="chips">${s.paused?'':button('暂停','pause')}
+      ${s.module!=='focus'&&!s.paused?button('记一次中断','interruption'):''}</div>
+      ${button('结束并记录','stop')}</div>`}
+    </div>`;
+}
+function percentProgress(s) {
+  if (s.module==='focus') return Math.min(100,100*earned(s)/(s.target*60));
+  if (s.mode==='nback') return 100*s.index/s.bank.length;
+  const unit = s.mode==='running' || s.mode==='ospan'?
+    (s.phase==='recall'?.5+s.position/s.bank[s.index].answer.length*.5:0):
+    s.part/s.bank[s.index].steps.length;
+  return 100*(s.index+unit)/s.bank.length;
+}
+function paintTimer() {
+  const s=session;
+  if (!s || s.finished || page!=='train') return;
+  const elapsed=document.getElementById('elapsed');
+  if (elapsed) elapsed.textContent=displayClock(earned(s));
+  const progress=document.getElementById('progress');
+  if (progress) progress.style.width=percentProgress(s)+'%';
+  const countdown=document.getElementById('focus-countdown');
+  if (countdown) countdown.textContent=displayClock(Math.max(0,s.target*60-earned(s)));
+}
+function startRecall(s) {
+  s.position=0;
+  s.recallGiven=[];
+  phase(s,'recall');
+}
+function tick() {
+  if (dateKey!==day() && !session) {
+    if (reviewWeek===monday(dateKey)) reviewWeek=monday(day());
+    if (page==='home') render(false);
+    else dateKey=day();
+  }
+  if (!isActive()) return;
+  const s=session;
+  if (s.module==='focus' && earned(s)>=s.target*60) {finish(true);return;}
+  if (s.phaseEnds!==null && msNow()>=s.phaseEnds) {
+    const current=s.bank[s.index];
+    if (s.phase==='nback') {
+      if (s.index>=s.level) {
+        const text=value=>({yes:'相同',no:'不同','':''}[value]);
+        answerItem(current.target?'target':'other',`第 ${s.index-s.level+1} 个试次 · ${current.letter}`,
+          current.target?'相同':'不同',text(s.phaseResponse),nbackExplanation(s.level,current.lookback,current.letter));
+      }
+      s.index++;
+      if (s.index===s.bank.length) {finish(true);return;}
+      phase(s,'nback',nbackSeconds[s.level-1]);
+    } else if (s.phase==='digit') {
+      s.part++;
+      if (s.part===current.stream.length) startRecall(s);
+      else phase(s,'digit',1.25);
+    } else if (s.phase==='judgment') {
+      recordJudgment('');
+      return;
+    } else if (s.phase==='letter') {
+      s.part++;
+      if (s.part===current.answer.length) startRecall(s);
+      else phase(s,'judgment',judgmentSeconds[s.level-1]);
+    }
+    render(s.phase!=='nback' && s.phase!=='digit');
+  }
+  paintTimer();
+}
+setInterval(tick,80);
+document.addEventListener('visibilitychange',()=>{
+  if (document.hidden && session?.module!=='focus') pauseSession('页面隐藏');
+  else if (!document.hidden) tick();
+});
+function recordJudgment(value) {
+  const s=session, task=s.bank[s.index].problems[s.part];
+  answerItem('judgment',task.statement,task.truth?'成立':'不成立',({yes:'成立',no:'不成立','':''})[value],`等式左边算得 ${task.value}。与右边${task.truth?'相等，所以等式成立':'不相等，所以等式不成立'}。`);
+  phase(s,'letter',1.35);
+  render();
+}
+function respond(value) {
+  if (!isActive()) return;
+  const s=session;
+  if (s.phaseEnds!==null && msNow()>=s.phaseEnds) {tick();return;}
+  if (s.phase==='nback' && !s.phaseResponse && s.index>=s.level) {
+    s.phaseResponse=value;
+    render(false);
+  }
+  if (s.phase==='judgment') recordJudgment(value);
+}
+window.addEventListener('keydown',e=>{
+  if (!isActive() || e.repeat || e.ctrlKey || e.metaKey || e.altKey || e.isComposing || document.querySelector('dialog[open]')) return;
+  if (!['nback','judgment'].includes(session.phase) || !/^[fj]$/i.test(e.key)) return;
+  e.preventDefault();
+  respond(e.key.toLowerCase()==='f'?'yes':'no');
+});
+function recall(value) {
+  const s=session, current=s.bank[s.index];
+  const position=s.position;
+  const whole=current.answer.join(' ');
+  s.recallGiven.push(value);
+  answerItem('recall',`第 ${s.index+1} 组 · 位置 ${position+1}`,current.answer[position],value,
+    s.mode==='running'?`完整序列为 ${current.stream.join(' ')}。最后 ${current.answer.length} 个数字按播放顺序为 ${whole}。`:`本组字母的出现顺序为 ${whole}。`);
+  s.position++;
+  if (s.position===current.answer.length) {
+    s.index++;
+    s.part=0;
+    if (s.index===s.bank.length) {finish(true);return;}
+    phase(s,s.mode==='ospan'?'judgment':'digit',s.mode==='ospan'?judgmentSeconds[s.level-1]:1.25);
+  }
+  render();
+}
+function answerStep(value) {
+  const s=session, current=s.bank[s.index];
+  const independent=s.module==='math' && s.index===3;
+  const question=independent?current.steps.at(-1):current.steps[s.part];
+  let correct;
+  if (s.module==='math') {
+    const expected=readNumber(question.answer), actual=readNumber(value);
+    correct=actual!==null && Math.abs(expected-actual)<=(question.answer.includes('/')?.000100000001:.0000000001);
+  }
+  const kind=s.module==='math'?(independent?'independent':'supported'):'main';
+  const explanation=independent?current.steps.map(x=>x.why).join(' '):question.why;
+  s.feedback=answerItem(kind,independent?current.stem:[current.stem,question.label].join(' · '),question.answer,value,explanation,correct);
+  s.answerDraft='';
+  phase(s,'feedback');
+  render();
+}
+function advance() {
+  const s=session;
+  if (s.module==='math') {
+    if (s.index===3) {finish(true);return;}
+    if (s.phase==='worked' || s.part===2) {
+      s.index++;
+      s.part=3-s.index;
+    } else s.part++;
+    phase(s,'solve');
+  } else if (s.module==='reason') {
+    if (s.phase==='premises') phase(s,'solve');
+    else if (s.part<s.bank[s.index].steps.length-1) {s.part++;phase(s,'solve');}
+    else {
+      s.index++;
+      s.part=0;
+      if (s.index===s.bank.length) {finish(true);return;}
+      s.showPremises=s.level!==3;
+      phase(s,'premises');
+    }
+  }
+  render();
+}
+function saveSession(form) {
+  const s=session;
+  const r={id:s.id,date:s.date,start:s.start,finish:s.finish,module:s.module,mode:s.mode,level:s.level,seed:s.seed,
+    seconds:s.seconds,complete:s.complete,effort:Number(form.get('effort'))||null,note:String(form.get('note')).trim(),
+    goal:s.goal,cue:s.cue,outcome:String(form.get('outcome')||''),target:s.target,items:s.items,events:s.events};
+  const saved=commit(base=>({...base,records:mergeRecords(base.records,[r])}));
+  session=null;
+  result={r,saved};
+  go('result');
+}
+function savedAnswer(item,value) {
+  if (item.kind!=='judgment') return value;
+  if (value==='正确') return '成立';
+  if (value==='错误') return '不成立';
+  return value;
+}
+function savedExplanation(item) {
+  const earlierWording = (item.kind==='target' || item.kind==='other')?
+    /^往前数第 ([1-3]) 项是 ([A-Z])，当前是 ([A-Z])。$/.exec(item.why):null;
+  return earlierWording?nbackExplanation(Number(earlierWording[1]),earlierWording[2],earlierWording[3]):item.why;
+}
+function detailTables(r) {
+  const effort=r.effort?`${r.effort}/5 · ${effortLabels[r.effort-1]}`:'未填写';
+  return `<div class="stack" style="margin-top:8px">
+    <p class="sub">${r.complete?'完整训练':'提前结束'} · 主观用力 ${effort} · 有效时间 ${displayClock(r.seconds)}</p>
+    ${r.goal?`<p><strong>目标</strong>　${esc(r.goal)}（${r.target} 分钟） · ${esc(outcomeLabels[r.outcome]||'未记录')}</p>`:''}
+    ${r.note?`<p class="stem"><strong>备注</strong>　${esc(r.note)}</p>`:''}
+    ${r.events.length?`<div class="table-wrap"><table><caption>中断与暂停</caption><thead><tr><th scope="col">事件发生时的计时</th><th scope="col">类型</th><th scope="col">恢复线索</th></tr></thead>
+      <tbody>${r.events.map(e=>`<tr><td>${displayClock(e.at)}</td><td>${esc(e.type)}</td><td>${esc(e.cue)||'—'}</td></tr>`).join('')}</tbody></table></div>`:''}
+    ${r.items.length?`<div class="table-wrap"><table><caption>逐题解析</caption><thead><tr><th scope="col">题目</th><th scope="col">你的作答</th><th scope="col">答案与解释</th></tr></thead>
+      <tbody>${r.items.map(i=>`<tr><td><small>${groups[i.kind]}</small><br>${esc(i.prompt)}</td>
+      <td>${i.result==='omission'?'漏答':esc(savedAnswer(i,i.given))+' · '+(i.result==='error'?'答错':'答对')}</td><td><strong>${esc(savedAnswer(i,i.expected))}</strong><br>${esc(savedExplanation(i))}</td></tr>`).join('')}</tbody></table></div>`:''}
+    </div>`;
+}
+function resultView() {
+  const {r,saved}=result;
+  const pending=todays().find(p=>!p.completed);
+  return `<div class="training">${heading(saved?'训练记录已保存':'训练记录暂存在本页',`${modules[r.module].name} · ${modeName(r.module,r.mode)} · 难度 ${r.level}`)}
+    <div class="card stack">${reportStats(r)}${detailTables(r)}
+    <div class="actions"><button class="btn" data-go="home">回到今日工作台</button>
+    ${pending?sessionButton(pending.id,pending.mode,pending.level,'继续今日计划 '+icon('arrow'),'primary'):''}
+    ${!saved?button('导出 JSON 备份','export-json','','primary'):''}<button class="btn" data-go="history">查看历史</button></div></div></div>`;
+}
+const moduleOptions = selected => Object.entries(modules).map(([id,m])=>option(id,m.name,selected)).join('');
+function recent(records,range) {
+  return range ? between(records,shiftDay(dateKey,1-range),dateKey) : records;
+}
+function recordSummary(r) {
+  const stats=tally(r.items);
+  return `<details class="card"><summary>${r.date} · ${modeName(r.module,r.mode)} · 难度 ${r.level}
+    <span class="sub">　${r.complete?'完成':'提前结束'} · ${r.module==='focus'?displayMinutes(r.seconds):`正确率 ${percent(stats.accuracy)} · 错 ${stats.errors} · 漏 ${stats.omissions}`}</span></summary>${detailTables(r)}</details>`;
+}
+function trendView(records,isFocus) {
+  if (!records.length) return empty('当前筛选范围内暂无完整记录。完成一场后可查看数据。');
+  const points=sorted(records).slice(0,7).reverse();
+  const max=isFocus?Math.max(...points.map(r=>r.seconds),60):100;
+  const value=r=>isFocus?r.seconds:(tally(r.items).accuracy||0)*100;
+  const text=r=>isFocus?`${(r.seconds/60).toFixed(1)} 分`:percent(tally(r.items).accuracy);
+  return `<div class="bars" role="list" aria-label="${isFocus?'有效时长':'正确率'}，由早到晚">${points.map(r=>`
+    <div class="bar-item" role="listitem" aria-label="${r.date} ${text(r)}"><strong>${text(r)}</strong>
+    <div class="bar-track" aria-hidden="true"><i style="height:${value(r)/max*100}%"></i></div><span>${r.date.slice(5)}</span></div>`).join('')}</div>
+    <p class="bar-caption">最近 ${points.length} 场完整训练 · 同题型、同难度 · ${isFocus?`纵轴上限 ${(max/60).toFixed(1)} 分钟`:'纵轴 0–100%'}</p>`;
+}
+function history() {
+  const f=filters;
+  const candidates=recent(completed(db.records),Number(f.range)).filter(r=>r.module===f.module && r.mode===f.mode && r.level===Number(f.level));
+  const log=sorted(recent(db.records,Number(f.hRange))).filter(r=>f.hModule==='all'||r.module===f.hModule);
+  const pageSize=12,maxPage=Math.max(0,Math.ceil(log.length/pageSize)-1);
+  f.hPage=Math.min(f.hPage,maxPage);
+  return `${heading('训练记录','按题型、难度和时间查看变化，或展开单次记录查看答案。')}<div class="stack">
+    <section class="card"><div class="card-head"><h2>表现趋势</h2></div><div class="filters">
+      <label class="field"><strong>模块</strong><select data-filter="module">${moduleOptions(f.module)}</select></label>
+      <label class="field"><strong>题型</strong><select data-filter="mode">${Object.entries(modules[f.module].modes).map(([k,name])=>option(k,name,f.mode)).join('')}</select></label>
+      <label class="field"><strong>难度</strong><select data-filter="level">${[1,2,3].map(x=>option(x,'难度 '+x,f.level)).join('')}</select></label>
+      <label class="field"><strong>时间范围</strong><select data-filter="range">${[7,30,90,0].map(x=>option(x,x?'最近 '+x+' 天':'全部日期',f.range)).join('')}</select></label>
+    </div><div style="margin-top:10px">${trendView(candidates,f.module==='focus')}</div></section>
+    <section class="stack"><div class="flex-between"><h2>训练历史</h2><div class="filters">
+      <label class="field"><strong>按模块查看</strong><select data-filter="hModule">${option('all','全部模块',f.hModule)}${moduleOptions(f.hModule)}</select></label>
+      <label class="field"><strong>记录日期</strong><select data-filter="hRange">${[7,30,90,365,0].map(x=>option(x,x?'最近 '+x+' 天':'全部日期',f.hRange)).join('')}</select></label>
+    </div></div>
+    ${log.length?log.slice(f.hPage*pageSize,(f.hPage+1)*pageSize).map(recordSummary).join(''):empty('这一范围内还没有训练记录。')}
+    ${log.length>pageSize?`<div class="flex-between">${button('上一页','h-page',`data-value="-1" ${f.hPage===0?'disabled':''}`)}<span class="sub">${f.hPage+1} / ${maxPage+1} 页 · ${log.length} 场</span>
+    ${button('下一页','h-page',`data-value="1" ${f.hPage===maxPage?'disabled':''}`)}</div>`:''}</section></div>`;
+}
+function assessment(records) {
+  const scores=tally(records.flatMap(r=>r.items));
+  const rated=records.filter(r=>r.effort!==null);
+  return {...scores,seconds:sum(records,r=>r.seconds),effort:rated.length?sum(rated,r=>r.effort)/rated.length:null,events:sum(records,r=>r.events.length)};
+}
+function review() {
+  const days=spanDays(reviewWeek), end=days[6], prev=shiftDay(reviewWeek,-7), current=monday(dateKey);
+  const weekdayOffset=current===reviewWeek?(weekday(dateKey)+6)%7:6;
+  const week=between(db.records,reviewWeek,end), last=between(db.records,prev,shiftDay(prev,weekdayOffset));
+  const perDay=days.map(date=>assessment(week.filter(r=>r.date===date)).seconds/60);
+  const max=Math.max(1,...perDay);
+  const sessions=completed(week);
+  const a=assessment(week);
+  const comparable = new Map();
+  for (const r of [...sessions,...completed(last)]) {
+    if (r.module==='focus' || r.events.length) continue;
+    const key=r.mode+'-'+r.level;
+    if (!comparable.has(key)) comparable.set(key,{id:r.module,mode:r.mode,level:r.level,now:[],prior:[]});
+    comparable.get(key)[r.date>=reviewWeek?'now':'prior'].push(r);
+  }
+  const rows=[...comparable.values()].filter(g=>g.now.length).map(g=>{
+    const ga=assessment(g.now), gb=assessment(g.prior);
+    const change=ga.accuracy!==null&&gb.accuracy!==null ? (ga.accuracy-gb.accuracy)*100 : null;
+    return `<tr><td>${modeName(g.id,g.mode)} · ${g.level}</td><td>${g.now.length} / ${g.prior.length}</td><td>${percent(ga.accuracy)} / ${percent(gb.accuracy)}</td>
+      <td>${change===null?'样本不足':`${change>0?'+':''}${change.toFixed(1)} 个百分点`}</td>
+      <td>${ga.errors} / ${ga.omissions}</td><td>${displayMinutes(ga.seconds/g.now.length)}</td></tr>`;
+  }).join('');
+  const focus=week.filter(r=>r.module==='focus');
+  const notes=db.reviews[reviewWeek]||'';
+  return `${heading('每周复盘','对照表现、耗时和主观用力，找出下周想练的一件事。')}
+  <div class="stack"><div class="flex-between">${button('← 上一周','week','data-value="-7"')}<strong>${reviewWeek} 至 ${end}</strong>
+  ${button('下一周 →','week',`data-value="7" ${reviewWeek>=current?'disabled':''}`)}</div>
+  <div class="dash-grid"><section class="card"><div class="card-head"><h2>有效训练时长</h2></div>
+  <div class="bars" role="list" aria-label="本周逐日有效时长">${perDay.map((v,i)=>`<div class="bar-item" role="listitem" aria-label="${days[i]} ${v.toFixed(1)} 分钟">
+    <strong>${v.toFixed(1)}</strong><div class="bar-track" aria-hidden="true"><i style="height:${v/max*100}%"></i></div><span>周${'一二三四五六日'[i]}</span></div>`).join('')}</div><p class="hint">单位为分钟，含提前结束的练习与单任务时段。</p></section>
+  <section class="card"><div class="card-head"><h2>本周完成情况</h2></div><div class="stats"><div><strong>${uniqueDays(sessions)}<small> / ${db.settings.weeklyGoal}</small></strong><small>训练天数</small></div>
+    <div><strong>${sessions.length}</strong><small>完整场次</small></div><div><strong>${a.effort===null?'—':a.effort.toFixed(1)}</strong><small>平均用力 / 5</small></div></div>
+    ${weekStrip(reviewWeek,week)}<p class="hint">本周共记录 ${a.events} 次中断／暂停。单任务 ${focus.length} 场，${focus.filter(r=>r.outcome==='done').length} 场达成自定目标。</p></section></div>
+  <section class="card"><div class="card-head"><h2>与上周对照</h2></div>
+    <p class="hint">对照的是同题型、同难度且练到结束的场次，记录过中断或暂停的场次不纳入。若本周还没结束，对照上周一到同一星期几。正确率等于答对数除以计分项目总数，超时未答和主动跳过都计为漏答。</p>
+    ${rows?`<div class="table-wrap"><table><thead><tr><th scope="col">题型 · 难度</th><th scope="col">场次（本 / 上）</th><th scope="col">正确率（本 / 上）</th><th scope="col">差值</th><th scope="col">错 / 漏（本周）</th><th scope="col">场均时长（本周）</th></tr></thead>
+    <tbody>${rows}</tbody></table></div>`:empty('本周暂无符合对照条件的计分场次。')}</section>
+  <section class="card"><div class="card-head"><h2>复盘笔记</h2></div><form id="review-form" class="row-gap">
+    <label class="field"><strong>下周准备练什么？</strong><textarea name="note" maxlength="1200" rows="3" placeholder="例：做方程时，先写出移项后的系数，再核对符号。">${esc(notes)}</textarea></label>
+    <div><button class="btn primary" type="submit">保存本周笔记</button></div></form></section>
+  </div>`;
+}
+const citation = (title,url) => `<a href="${url}" target="_blank" rel="noopener noreferrer">${title}</a>`;
+function science() {
+  return `${heading('科学依据','怎么看练习成绩，以及每种方法适用的范围。')}<div class="stack prose">
+  <section class="card"><h2>练习表现与迁移</h2><p>正确率、速度和漏答反映你在当前任务与条件下的表现。熟悉题型或采用新策略也会提高成绩。研究对一般智力和日常认知能力的远迁移缺乏稳健支持，本工作台只报告练习数据。</p>
+  <p>${citation('Redick 等（2013）随机、安慰剂对照研究','https://pubmed.ncbi.nlm.nih.gov/22708717/')} ·
+  ${citation('Melby-Lervåg 等（2016）元分析','https://pmc.ncbi.nlm.nih.gov/articles/PMC4968033/')}</p></section>
+  <section class="card"><div class="chips">${chip('实验任务改编')}</div><h2>工作记忆更新与复杂跨度</h2>
+  <p>字母 N-back 用当前字母与 N 个位置之前的字母做比较，1-back 就是比较上一个字母。滚动记忆要求在一串未知长度的数字结束后，依出现顺序回忆最后几个数。操作广度交替安排等式判断和字母记忆，两项分别计分。工作台采用简化流程和固定作答时限，成绩用于个人练习对照。</p>
+  <p>${citation('Kirchner（1958）早期 N-back 任务','https://pubmed.ncbi.nlm.nih.gov/13539317/')} ·
+  ${citation('Pollack 等（1959）滚动记忆实验','https://pubmed.ncbi.nlm.nih.gov/13641585/')} ·
+  ${citation('Unsworth 等（2005）自动化操作广度','https://doi.org/10.3758/BF03192720')}</p></section>
+  <section class="card"><div class="chips">${chip('教学方法')}</div><h2>渐隐式数学推导</h2><p>本模块用一题示范、两题补全和一题独立解题，帮助熟悉同类题的解题程序。补全步骤和独立结果分别统计。教学研究关注所学内容的掌握及其应用。</p>
+  <p>${citation('Renkl 等（2002）从例题到独立解题的研究','https://doi.org/10.1080/00220970209599510')}</p></section>
+  <section class="card"><div class="chips">${chip('领域练习')}</div><h2>连续推理链</h2><p>练习应用条件蕴涵、集合包含与顺序传递，每步都可核对前提。题目和自适应规则为工作台设计，分数描述这些题型中的推导表现。</p></section>
+  <section class="card"><div class="chips">${chip('实践策略')}</div><h2>单任务注意练习</h2><p>给真实任务设定一个目标和时段，遇到打断时写下恢复线索。任务切换与恢复计划研究为这一设计提供线索。时长、中断次数和目标完成度由你结合实际任务解释。</p>
+  <p>${citation('Leroy（2009）任务切换中的注意残留','https://doi.org/10.1016/j.obhdp.2009.04.002')} ·
+  ${citation('Leroy 与 Glomb（2018）恢复计划研究','https://doi.org/10.1287/orsc.2017.1184')}</p></section>
+  <section class="card"><h2>自适应怎么运作</h2>
+  <p>系统查看同题型最近两次练到结束、且未记过中断或暂停的记录。只有这两次难度相同，才会判断是否调级。两次得分都至少为 80%，且填过的用力评分都不超过 3，就上调一级。两次得分都低于 60%，就下调一级。N-back 分别统计应答「相同」和应答「不同」的题，取较低的正确率。操作广度同样取等式判断与字母回忆中较低的一项。数学看独立题结果。</p>
+  <p>单任务只用默认时段、计时结束且未记过中断或暂停的记录。最近两次难度相同，目标都达成且用力评分都不超过 3，才会延长默认时段。两次用力评分都至少为 4 时缩短。自订时段照常保存到历史。你可在开始前手动选择 1–3 级。</p>
+  <p class="hint">以上阈值是应用的练习安排规则。研究链接需联网，练习、记录和复盘均可离线使用。</p></section></div>`;
+}
+function data() {
+  return `${heading('设置与备份','在这台电脑上管理你的练习档案。')}<div class="stack prose">
+  <section class="card"><h2>训练设置</h2><p>默认周一至周五提供计划，周末可自选。周目标用于显示进度。</p>
+    <form id="settings-form" class="row-gap" style="margin-top:10px"><label class="field compact"><strong>每周训练天数目标</strong>
+    <select name="weeklyGoal">${[1,2,3,4,5,6,7].map(n=>option(n,n+' 天',db.settings.weeklyGoal)).join('')}</select></label>
+    <div><button class="btn primary" type="submit">保存设置</button></div></form></section>
+  <section class="card"><h2>备份与恢复</h2><p>当前档案有 ${db.records.length} 场训练和 ${Object.keys(db.reviews).length} 篇复盘笔记。上次发起 JSON 下载：${db.settings.lastBackup||'尚未导出'}。</p>
+    <p>JSON 包含完整记录、逐题解析、设置和复盘笔记，可导入恢复。CSV 提供逐场汇总，可在 Excel 查看。</p>
+    <div class="actions">${button('下载 JSON 备份','export-json','','primary')}${button('导出 CSV','export-csv')}${button('导入 JSON','select-file')}</div>
+    <input type="file" id="backup-file" accept=".json,application/json" hidden>
+    <p class="hint">导入会合并历史。若两份场次记录的编号相同，或笔记属于同一周，保留当前档案里的版本。</p></section>
+  <section class="card"><h2>让数据长期可用</h2><ul>
+    <li>把 HTML 文件放在固定文件夹，每次用同一个浏览器及其同一个用户配置打开。</li>
+    <li>浏览器保存训练数据，HTML 文件是程序。每周下载一份 JSON，确认文件已经保存，再复制到你常用的备份位置。</li>
+    <li>移动文件、更换浏览器或清理浏览器数据前先下载 JSON。在新位置打开程序，然后导入。</li>
+    <li>存储无法写入时，页面会提示导出。请在关闭页面前立即下载 JSON，保留独立备份。</li>
+  </ul></section></div>`;
+}
+function download(name,body,mime) {
+  const url=URL.createObjectURL(new Blob([body],{type:mime}));
+  const a=document.createElement('a');
+  a.href=url;a.download=name;document.body.append(a);a.click();a.remove();
+  setTimeout(()=>URL.revokeObjectURL(url),10000);
+}
+function exportJson() {
+  const key=day();
+  commit(base=>({...base,settings:{...base.settings,lastBackup:key}}));
+  download(`认知实验室备份-${key}.json`,JSON.stringify(db),'application/json;charset=utf-8');
+  if (page==='data') render(false);
+  toast('已发起 JSON 下载。请到浏览器的下载记录确认。');
+}
+function csvCell(value) {
+  let text=String(value??'');
+  if (typeof value==='string' && /^[\s]*[=+\-@]|^[\t\r\n]/.test(text)) text="'"+text;
+  return '"'+text.replace(/"/g,'""')+'"';
+}
+function exportCsv() {
+  refreshStorage();
+  const cols=['日期','开始时间（UTC）','模块','题型','难度','场次状态','有效秒数','计分项目','正确','错误','漏答','正确率','用力 1–5','中断及暂停','目标分钟','目标','目标结果','恢复线索','备注','记录编号'];
+  const rows=sorted(db.records).map(r=>{
+    const t=tally(r.items);
+    return [r.date,r.start,modules[r.module].name,modeName(r.module,r.mode),r.level,r.complete?'完成':'提前结束',r.seconds,
+      r.module==='focus'?'':t.total,r.module==='focus'?'':t.correct,r.module==='focus'?'':t.errors,r.module==='focus'?'':t.omissions,
+      t.accuracy===null?'':percent(t.accuracy),r.effort,r.events.length,r.target||'',r.goal,outcomeLabels[r.outcome]||'',r.cue,r.note,r.id];
+  });
+  download(`认知实验室记录-${day()}.csv`,'\uFEFF'+[cols,...rows].map(row=>row.map(csvCell).join(',')).join('\r\n'),'text/csv;charset=utf-8');
+  toast('已发起 CSV 下载。');
+}
+function confirmBox(title,body,label,onConfirm) {
+  const dialog=document.createElement('dialog');
+  dialog.setAttribute('aria-labelledby','dialog-title');
+  dialog.innerHTML=`<h2 id="dialog-title">${title}</h2><form method="dialog"><div class="row-gap" style="margin-top:9px">${body}</div>
+    <div class="actions"><button class="btn" value="cancel" autofocus>取消</button><button class="btn primary" value="confirm">${label}</button></div></form>`;
+  document.body.append(dialog);
+  dialog.addEventListener('close',()=>{
+    const confirmed=dialog.returnValue==='confirm';
+    if (confirmed) onConfirm(dialog);
+    dialog.remove();
+  },{once:true});
+  dialog.showModal();
+}
+async function importJson(file) {
+  try {
+    if (file.size>30*1024*1024) throw new Error('备份文件超过 30 MB。');
+    const imported=sanitizeDb(JSON.parse((await file.text()).replace(/^\uFEFF/,'')));
+    if (page!=='data' || document.querySelector('dialog[open]')) return;
+    refreshStorage();
+    const existing=new Set(db.records.map(r=>r.id));
+    const extra=imported.records.filter(r=>!existing.has(r.id)).length;
+    const fresh=db.records.length===0 && Object.keys(db.reviews).length===0;
+    confirmBox('导入训练档案',`<p>文件包含 ${imported.records.length} 场训练，预计新增 ${extra} 场，另有 ${Object.keys(imported.reviews).length} 篇复盘笔记。</p>
+      <label class="check"><input id="restore-settings" type="checkbox" ${fresh?'checked':''}>使用备份中的每周目标</label>`,'合并导入',dialog=>{
+      const restore=dialog.querySelector('#restore-settings').checked;
+      const saved=commit(base=>({...base,records:mergeRecords(imported.records,base.records),reviews:{...imported.reviews,...base.reviews},
+        settings:restore?{...base.settings,weeklyGoal:imported.settings.weeklyGoal}:base.settings}));
+      render();
+      toast(saved?'档案已合并到浏览器存储。':'档案已合并到当前页面。请再次导出以保留合并结果。');
+    });
+  } catch(error) {
+    toast(error instanceof SyntaxError?'文件无法解析，请选择工作台导出的 JSON 备份。':error.message);
+  }
+}
+document.addEventListener('click',event=>{
+  const control=event.target.closest('button[data-go],button[data-action]');
+  if (!control || control.disabled) return;
+  if (control.dataset.go) {
+    if (session) {toast('请先结束当前训练并保存记录。');return;}
+    go(control.dataset.go);
+    return;
+  }
+  const {action,module:id,mode,level,value,index}=control.dataset;
+  if (action==='prepare') {
+    const chosen=Number(level)||recommended(db.records,id,mode);
+    setup={id,mode,level:chosen,goal:'',duration:focusMinutes(chosen)};
+    go('setup');
+  } else if (action==='binary') respond(value);
+  else if (action==='recall' && isActive()) recall(value);
+  else if (action==='reason' && isActive()) answerStep(session.bank[session.index].steps[session.part].options[Number(index)]);
+  else if (action==='skip-answer' && isActive()) answerStep('');
+  else if (action==='advance' && isActive()) advance();
+  else if (action==='pause') pauseSession('手动暂停');
+  else if (action==='interruption') pauseSession('外界打断');
+  else if (action==='stop' && session) {
+    tick();
+    if (!session.finished) finish(false);
+  } else if (action==='discard') {
+    confirmBox('放弃这场训练？','<p>放弃后，本场作答和备注会从当前页面清除。</p>','放弃记录',()=>{
+      session=null;
+      go('home');
+    });
+  } else if (action==='week') {
+    reviewWeek=shiftDay(reviewWeek,Number(value));
+    render();
+  } else if (action==='h-page') {
+    filters.hPage+=Number(value);
+    render(false);
+  } else if (action==='export-json') exportJson();
+  else if (action==='export-csv') exportCsv();
+  else if (action==='select-file') document.getElementById('backup-file').click();
+});
+document.addEventListener('input',event=>{
+  if (session && event.target.matches('#math-form input[name="answer"]')) session.answerDraft=event.target.value;
+});
+document.addEventListener('toggle',event=>{
+  if (session && event.target.id==='premises' && event.target.isConnected) session.showPremises=event.target.open;
+},true);
+document.addEventListener('change',event=>{
+  const field=event.target;
+  if (field.id==='level' && setup) {
+    setup.level=Number(field.value);
+    if (setup.id==='focus') field.form.elements.duration.value=String(focusMinutes(setup.level));
+  } else if (field.dataset.filter) {
+    const name=field.dataset.filter;
+    filters[name]=field.value;
+    if (name==='module') filters.mode=firstMode(field.value);
+    if (name.startsWith('h')) filters.hPage=0;
+    render(false);
+    main.querySelector(`[data-filter="${name}"]`).focus();
+  } else if (field.id==='backup-file') {
+    const file=field.files[0];
+    field.value='';
+    if (file) void importJson(file);
+  }
+});
+document.addEventListener('submit',event=>{
+  const form=event.target;
+  if (!form.id) return;
+  event.preventDefault();
+  const values=new FormData(form);
+  if (form.id==='start-form') begin(values);
+  else if (form.id==='math-form' && isActive()) {
+    const raw=String(values.get('answer')).trim();
+    if (readNumber(raw)===null) {toast('请输入有效数字或分数，例如 −4 或 3/8。');return;}
+    answerStep(raw);
+  } else if (form.id==='event-form' && isActive()) {
+    tick();
+    if (!isActive()) return;
+    recordEvent(String(values.get('kind')),String(values.get('cue')).trim());
+    render(false);
+    document.querySelector('#event-form button').focus();
+  } else if (form.id==='resume-form' && session?.paused) {
+    const cue=String(values.get('cue')).trim();
+    if (cue && session.events.length) {
+      session.cue=cue;
+      session.events.at(-1).cue=cue;
+    }
+    resumeSession();
+  } else if (form.id==='save-form' && session?.finished) saveSession(values);
+  else if (form.id==='review-form') {
+    const note=String(values.get('note')).trim();
+    const saved=commit(base=>{
+      const reviews={...base.reviews};
+      if (note) reviews[reviewWeek]=note;
+      else delete reviews[reviewWeek];
+      return {...base,reviews};
+    });
+    toast(saved?'本周笔记已保存。':'本周笔记已暂存，请导出备份。');
+  } else if (form.id==='settings-form') {
+    const saved=commit(base=>({...base,settings:{...base.settings,weeklyGoal:Number(values.get('weeklyGoal'))}}));
+    toast(saved?'训练设置已保存。':'训练设置已暂存，请导出备份。');
+  }
+});
+render(false);
+
+</script>
+</body>
+</html>
